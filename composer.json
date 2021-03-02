@@ -1,0 +1,24 @@
+{
+    "name": "romai/p5-blog-mvc",
+    "description": "Projet 5 de la formation Développeur Symfony chez OpenClassrooms",
+    "authors": [
+        {
+            "name": "AlixRomain",
+            "email": "59125701+XAD66689@users.noreply.github.com",
+            "homepage": "https://blog.tabaz.fr",
+            "role": "Apprenti Développeur PHP/Symfony"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {
+        "twig/twig": "^3.0"
+    },
+    "support": {
+        "issues": "https://github.com/AlixRomain/P5-Blog-MVC/issues",
+        "source": "https://github.com/AlixRomain/P5-Blog-MVC"
+    }
+}
