@@ -4,7 +4,7 @@
     "authors": [
         {
             "name": "AlixRomain",
-            "email": "59125701+XAD66689@users.noreply.github.com",
+            "email": "romain.alix89@gmail.com",
             "homepage": "https://blog.tabaz.fr",
             "role": "Apprenti Développeur PHP/Symfony"
         }
@@ -15,7 +15,15 @@
         }
     },
     "require": {
-        "twig/twig": "^3.0"
+        "php": "7.3",
+        "twig/twig": "^3.0",
+        "components/jquery": "3.3.1",
+        "ext-pdo": "*"
+    },
+    "config": {
+        "platform": {
+            "php": "7.3"
+        }
     },
     "support": {
         "issues": "https://github.com/AlixRomain/P5-Blog-MVC/issues",
