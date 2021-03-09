@@ -8,23 +8,24 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema blog-p5
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema blog-p5
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `blog-p5` DEFAULT CHARACTER SET utf8 ;
+USE `blog-p5` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`user`
+-- Table `blog-p5`.`user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`user` (
+CREATE TABLE IF NOT EXISTS `blog-p5`.`user` (
   `id_user` INT NOT NULL AUTO_INCREMENT,
   `firstName` VARCHAR(45) NULL,
   `lastName` VARCHAR(45) NULL,
   `email` VARCHAR(65) NULL,
+  `password` VARCHAR(100) NULL,
   `pseudo` VARCHAR(45) NULL,
   `chapo` TINYTEXT NULL,
   `rank` VARCHAR(65) NULL,
@@ -40,9 +41,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`blogPost`
+-- Table `blog-p5`.`blogPost`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`blogPost` (
+CREATE TABLE IF NOT EXISTS `blog-p5`.`blogPost` (
   `id_blogPost` INT NOT NULL AUTO_INCREMENT,
   `title` TINYTEXT NOT NULL,
   `chapo` TINYTEXT NULL,
@@ -56,16 +57,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`blogPost` (
   INDEX `fk_blogPost_user_idx` (`id_author` ASC),
   CONSTRAINT `fk_blogPost_user`
     FOREIGN KEY (`id_author`)
-    REFERENCES `mydb`.`user` (`id_user`)
+    REFERENCES `blog-p5`.`user` (`id_user`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`comment`
+-- Table `blog-p5`.`comment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`comment` (
+CREATE TABLE IF NOT EXISTS `blog-p5`.`comment` (
   `idcomment` INT NOT NULL AUTO_INCREMENT,
   `content` LONGTEXT NULL,
   `date_create` DATETIME NOT NULL,
@@ -78,12 +79,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`comment` (
   INDEX `fk_comment_user1_idx` (`id_author` ASC),
   CONSTRAINT `fk_comment_blogPost1`
     FOREIGN KEY (`id_blogPost`)
-    REFERENCES `mydb`.`blogPost` (`id_blogPost`)
+    REFERENCES `blog-p5`.`blogPost` (`id_blogPost`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_comment_user1`
     FOREIGN KEY (`id_author`)
-    REFERENCES `mydb`.`user` (`id_user`)
+    REFERENCES `blog-p5`.`user` (`id_user`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

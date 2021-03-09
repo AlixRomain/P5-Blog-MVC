@@ -4,6 +4,7 @@ namespace App\Controller\Globals;
 
 use App\Controller\ImportController;
 use Twig\Environment;
+use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 
 abstract class MasterController extends ImportController
@@ -24,7 +25,8 @@ abstract class MasterController extends ImportController
             'cache' => false,
             'debug' => true,
         ));
-
+        //permet de Dumper depuis le front
+        $this->twig->addExtension(new DebugExtension());
     }
 
     /**

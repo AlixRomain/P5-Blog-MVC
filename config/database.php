@@ -1,6 +1,6 @@
 <?php
 
-define('DB_DSN', 'mysql:host=localhost;dbname=p5_mvc_blog;charset=UTF8');
+define('DB_DSN', 'mysql:host=localhost;dbname=blog-p5;charset=UTF8');
 
 define('DB_USER', 'root');
 
