@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\Globals\GetController;
 use App\Controller\Globals\PostController;
 use App\Model\BlogPostModel;
+use App\Model\CommentModel;
 
 /**
  * Class ImportController
@@ -20,10 +21,20 @@ class ImportController
      */
     protected $get;
     /**
+     * @var CommentModel;
+
+     */
+    protected $commentModel;
+    /**
      * @var BlogPostModel;
 
      */
     protected $blogModel;
+    /**
+     * @var ValidatorController;
+
+     */
+    protected $validator;
 
     /**
      * ImportController constructor.
@@ -33,5 +44,7 @@ class ImportController
         $this->post = new PostController();
         $this->get = new GetController();
         $this->blogModel = new BlogPostModel();
+        $this->commentModel = new CommentModel();
+        $this->validator = new Validator();
     }
 }

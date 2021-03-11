@@ -11,12 +11,13 @@ use App\Controller\Globals\MasterController;
  */
 class HomeController extends MasterController
 {
-
     public function defaultMethod()
     {
-        $blogposts = $this->blogModel->fetchAllArticle();
+        return $this->twig->render('home.twig');
+    }
 
-        return $this->twig->render('home.twig',
-        ['blogPosts'=> $blogposts]);
+    public function AboutMethod()
+    {
+        return $this->twig->render('about.twig');
     }
 }

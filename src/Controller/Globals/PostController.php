@@ -39,4 +39,14 @@ class PostController
         return $this->post[$var];
     }
 
+    /**
+     * @param string $var
+     * @return mixed
+     */
+    public function getDataClean(string $var)
+    {
+        return htmlspecialchars(strip_tags(trim($var)));
+    }
+
+
 }

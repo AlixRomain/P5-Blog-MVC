@@ -35,7 +35,7 @@ abstract class MasterController extends ImportController
      */
     public function redirect(string $page, $param = null)
     {
-        header('Location: index.php?page=' . $page . '&' . $param);
+        header('Location: index.php?page=' . $page . '&method=' . $param);
         exit;
     }
 

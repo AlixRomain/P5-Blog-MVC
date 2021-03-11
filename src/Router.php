@@ -29,6 +29,7 @@ class Router
             $method = 'DefaultMethod';
         }
         $this->method = ucfirst($method);
+
     }
 
     public function setHomeController(){

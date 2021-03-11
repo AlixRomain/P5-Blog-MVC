@@ -34,4 +34,15 @@ class MasterModel
         return $req->fetchAll();
     }
 
+    /**
+     * @param $statement
+     * @param array $array
+     * @return bool|\PDOStatement
+     */
+    public function execArray($req, $array = [])
+    {
+        $req = Connexion::getPDO()->prepare($req);
+        return $req->execute($array);
+    }
+
 }
