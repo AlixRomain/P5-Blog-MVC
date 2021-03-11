@@ -1,0 +1,104 @@
+{% extends 'layout/layoutFront.twig' %}
+{% block header %}
+    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="site-heading">
+                        <h1>{{ blogPost.title }}</h1>
+                        <span class="subheading"> {{ blogPost.chapo }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+{% block content %}
+
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <p>{{ blogPost.content }}</p>
+
+                    <p class="post-meta post-preview">Mis à jour le {{ blogPost.dateCreate|date("m/d/Y") }} par
+                        <strong>{{blogPost.firstName  }} {{blogPost.lastName  }}</strong>
+                    </p>
+                    <p>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            Commenter
+                        </button>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                        <form class="col" action="index.php?page=comment&method=createComment&idBlogPost={{ blogPost.idBlogPost}}" method="post">
+                            <div class="form-group">
+                                <textarea class="form-control" id="comment" name="comment" placeholder="Taper votre commentaire..." rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Envoyer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </article>
+
+    <hr>
+{% if comments != false %}
+    <div class="container">
+        <div class="row">
+            <div class="panel panel-default widget">
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    <h3 class="panel-title">
+                        Derniers commentaires</h3>
+                    <span class="label label-info">
+                    Commentaires soumis à validation</span>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        {% for comment in comments %}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-xs-2 col-md-1">
+                                    <img src="http://placehold.it/80" class="img-circle img-responsive" alt="" /></div>
+                                <div class="col-xs-10 col-md-11">
+                                    <div>
+                                        <div class="mic-info">
+                                           <strong> Par: {{ comment.firstName}} {{ comment.lastName}}  le {{ comment.dateCreate|date("m/d/Y") }}</strong>
+                                        </div>
+                                        <span >{{ comment.pseudo}}</span>
+                                    </div>
+                                    <div class="comment-text mb-3">
+                                       {{ comment.content }}
+                                    </div>
+                                    <div class="action">
+                                        <a href="index.php?page=">
+                                            <button type="button" class="btn btn-primary btn-xs" title="Modifier">
+                                                <span class="glyphicon glyphicon-pencil"><i class="fas fa-edit"></i></span>
+                                            </button>
+                                        </a>
+                                        <a href="index.php?page=">
+                                            <button type="button" class="btn btn-success btn-xs" title="Approuver">
+                                                <span class="glyphicon glyphicon-ok"><i class="far fa-check-square"></i></span>
+                                            </button>
+                                        </a>
+                                        <a href="index.php?page=">
+                                            <button type="button" class="btn btn-danger btn-xs" title="Suprimmer">
+                                                <span class="glyphicon glyphicon-trash"><i class="far fa-trash-alt"></i></span>
+                                             </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="#" class="btn btn-primary btn-sm btn-block" role="button"><span class="glyphicon glyphicon-refresh"></span> Plus</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

@@ -2,10 +2,12 @@
 
 namespace App\Controller\Globals;
 
+use App\Controller\ImportController;
 use Twig\Environment;
+use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 
-abstract class MasterController
+abstract class MasterController extends ImportController
 {
     /**
      * @var Environment|null
@@ -13,15 +15,18 @@ abstract class MasterController
     protected $twig = null;
     /**
      * Constructor of MasterController
-     * This role is to buil a template twig
+     * This role is to build a template twig
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->twig = new Environment(new FilesystemLoader('../src/View'), array(
             'cache' => false,
             'debug' => true,
         ));
-
+        //permet de Dumper depuis le front
+        $this->twig->addExtension(new DebugExtension());
     }
 
     /**
@@ -30,7 +35,7 @@ abstract class MasterController
      */
     public function redirect(string $page, $param = null)
     {
-        header('Location: index.php?page=' . $page . '&' . $param);
+        header('Location: index.php?page=' . $page . '&method=' . $param);
         exit;
     }
 

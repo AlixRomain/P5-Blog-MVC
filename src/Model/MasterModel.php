@@ -7,13 +7,13 @@ namespace App\Model;
 class MasterModel
 {
     /**
-     * @param $statement
+     * @param $req
      * @return mixed
      */
-    public function fetch($statement)
+    public function fetch($req)
     {
         try {
-            $req = Connexion::getPDO()->prepare($statement);
+            $req = Connexion::getPDO()->prepare($req);
             $req->execute();
             return $req->fetch();
         } catch (\PDOException $e){
@@ -21,17 +21,28 @@ class MasterModel
         }
 
     }
-    //Voir pour refactoriser avec dans le fetch. le statement qui finit par AND Article.idArticle = :id)
+    //Voir pour refactoriser avec dans le fetch. la requte qui finit par AND Article.idArticle = :id)
     //puis dans execute 'id'=> $id   $id etant deuxieme param de read.
     /**
-     * @param $statement
+     * @param $req
      * @return array
      */
-    public function fetchAll($statement)
+    public function fetchAll($req)
     {
-        $req = Connexion::getPDO()->prepare($statement);
+        $req = Connexion::getPDO()->prepare($req);
         $req->execute();
         return $req->fetchAll();
+    }
+
+    /**
+     * @param $statement
+     * @param array $array
+     * @return bool|\PDOStatement
+     */
+    public function execArray($req, $array = [])
+    {
+        $req = Connexion::getPDO()->prepare($req);
+        return $req->execute($array);
     }
 
 }
