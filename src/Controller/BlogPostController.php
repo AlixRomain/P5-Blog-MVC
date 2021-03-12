@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Controller\Globals\MasterController;
 use App\Entity\BlogPost;
+use App\Entity\Comment;
 
 class BlogPostController extends MasterController
 {
@@ -41,9 +42,10 @@ class BlogPostController extends MasterController
     /**
      *
      */
-    public function showBlockPostMethod()
+    public function showBlockPostMethod($msg = null, $id_blog = null)
     {
-        $id_blogpost = $this->get->getDataGet('idBlogPost');
+        (!isset($id_blogpost))?$id_blogpost = $this->get->getDataGet('idBlogPost') :$id_blogpost = $id_blog;
+
         if(!is_numeric($id_blogpost)){
             $this->redirect('home','defaultMethod');
         }
@@ -51,7 +53,7 @@ class BlogPostController extends MasterController
         if($blogpost != false){
             $comments =  $this->commentModel->fetchAllCommentByBlogpost($id_blogpost);
             return $this->twig->render(self::TwigOne,
-                ['blogPost'=> $blogpost, 'comments'=> $comments ]);
+                ['blogPost'=> $blogpost, 'comments'=> $comments, 'errors'=> $msg ]);
         }else{
             $this->redirect('home','defaultMethod');
         }
@@ -95,6 +97,46 @@ class BlogPostController extends MasterController
 
                     if($this->blogModel->createBlogPost($blogPost)){
                         $success = 'Le BlogPost à bien été pris en compte. Il est en attente de validation.';
+                        return $this->allBlockPostMethod($success);
+                    }
+                }
+            }
+        }
+    }
+    /**
+     *
+     */
+    public function createCommentPost()
+    {
+        $dataPost = $this->post->getArrayPost();
+        $id_blogpost = $this->get->getDataGet('idBlogPost');
+        $validBlogPost = $this->blogModel->fetchOneBlogpostById($id_blogpost);
+
+        if(!isset($dataPost) || empty($dataPost) || $validBlogPost == false ){
+            $errors = 'Echec, votre commentaire n\'a pas été pris en compte par nos service.';
+            return $this->allBlockPostMethod($errors);
+        }else{
+            //Si je rafraichit la page et que j'ai déjà ce post e nbase je reroute
+            $exist = $this->commentModel->fetchOneCommentPostByContent($id_blogpost, $this->post->getDataClean($dataPost['comment']));
+            if ($exist !== false ){
+                $error= ['Votre commentaire est en attente de validation'];
+                return $this->showBlockPostMethod($error, $id_blogpost);
+            }else{
+                $cleanData = $this->validator->blogPostValid($dataPost);
+                if($cleanData !== true){
+                    return $this->showBlockPostMethod($cleanData, $id_blogpost);
+                }else{
+                    $dateCreate = date("Y-m-d H:i:s");
+                    $comment = new Comment([
+                        'content' => $this->post->getDataClean($dataPost['comment']),
+                        'dateCreate'=> $dateCreate,
+                        'publish' => 0,
+                        'actif' => 1,
+                        'id_author' => 1,
+                        'id_blogPost' => $id_blogpost
+                    ]);
+                    if($this->commentModel->createComment($comment)){
+                        $success = 'Votre commentaire à bien été pris en compte. Il est en attente de validation.';
                         return $this->allBlockPostMethod($success);
                     }
                 }

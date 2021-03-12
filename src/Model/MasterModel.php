@@ -35,7 +35,7 @@ class MasterModel
     }
 
     /**
-     * @param $statement
+     * @param $req
      * @param array $array
      * @return bool|\PDOStatement
      */

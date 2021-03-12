@@ -35,11 +35,12 @@ class BlogPostModel extends MasterModel
          * @return array
          * Retourne
          */
-
+        $title = Connexion::getPDO()->quote($title);
         return $this->fetch('
             SELECT title FROM blogpost
-            WHERE blogpost.title ='."'$title'");
+            WHERE blogpost.title ='.$title);
     }
+
     /**
      * @return array
      */
@@ -73,8 +74,8 @@ class BlogPostModel extends MasterModel
             $blogPost->getActif(),
             $blogPost->getIdAuthor()
     ];
-         return $this->execArray($req, $blog);
 
+         return $this->execArray($req, $blog);
     }
 
 
