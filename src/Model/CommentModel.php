@@ -40,6 +40,52 @@ class CommentModel extends MasterModel
             WHERE blogpost.id_blogpost = '.$id_BlogPost.'
              AND comment.content ='.$content);
     }
+    /**
+     * @return array
+     */
+    public function fetchOneCommentById($id_BlogPost, $id_comment)
+    {
+        /**
+         * @return array
+         * Retourne
+         */
+        return $this->fetch('
+            SELECT * FROM comment
+            INNER JOIN blogpost
+            ON blogpost.id_blogpost = comment.id_blogpost
+            WHERE blogpost.id_blogpost = '.$id_BlogPost.'
+             AND comment.id_comment ='.$id_comment);
+    }
+
+    /**
+     * @return array
+     */
+    public function disableComment($id_comment)
+    {
+        /**
+         * @return array
+         * Retourne
+         */
+        return $this->fetch('
+            UPDATE comment SET
+            actif = 0
+            WHERE comment.id_comment ='.$id_comment);
+    }
+
+    /**
+     * @return array
+     */
+    public function publishComment($id_comment)
+    {
+        /**
+         * @return array
+         * Retourne
+         */
+        return $this->fetch('
+            UPDATE comment SET
+            publish = 1
+            WHERE comment.id_comment ='.$id_comment);
+    }
 
     /**
      * @return array
@@ -57,6 +103,24 @@ class CommentModel extends MasterModel
         ];
         return $this->execArray($req, $newComment);
 
+    }
+
+    /**
+     * @return array
+     */
+    public function fetchAllCommentDisable($id_blogPost)
+    {
+        /**
+         * @return array
+         * Retourne
+         */
+        return $this->fetchAll('
+            SELECT * FROM comment
+            INNER JOIN user 
+            ON user.id_user = comment.id_author
+            WHERE comment.publish = 0
+            AND comment.actif = 1
+            AND comment.id_blogPost= '.$id_blogPost);
     }
 
 }

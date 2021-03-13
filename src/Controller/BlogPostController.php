@@ -50,13 +50,32 @@ class BlogPostController extends MasterController
             $this->redirect('home','defaultMethod');
         }
         $blogpost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
-        if($blogpost != false){
+        if($blogpost !== false){
             $comments =  $this->commentModel->fetchAllCommentByBlogpost($id_blogpost);
             return $this->twig->render(self::TwigOne,
                 ['blogPost'=> $blogpost, 'comments'=> $comments, 'errors'=> $msg ]);
         }else{
             $this->redirect('home','defaultMethod');
         }
+    }
+    /**
+     *
+     */
+    public function deleteBlogPostMethod()
+    {
+        $id_blogpost = $this->get->getDataGet('idBlogPost') ;
+        if(!is_numeric($id_blogpost)){
+            $this->redirect('home','defaultMethod');
+        }
+        $blogPost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
+        if($blogPost != false){
+            $blogPost =  $this->blogModel->disableBlogPost($id_blogpost);
+            ($blogPost !== false)? $error ='BlogPost supprimé avec succès':$error = 'Echec de la suppression du blogPost';
+            return $this->allBlockPostMethod($error);
+        }else{
+            $this->redirect('home','defaultMethod');
+        }
+
     }
     /**
      *
@@ -90,15 +109,55 @@ class BlogPostController extends MasterController
                         'content' => $this->post->getDataClean($dataPost['content']),
                         'dateCreate'=> $dateCreate,
                         'dateUpdate'=> $dateUpdate,
-                        'publish' => 0,
+                        'publish' => 1,
                         'actif' => 1,
                         'id_author' => 1
                     ]);
 
                     if($this->blogModel->createBlogPost($blogPost)){
-                        $success = 'Le BlogPost à bien été pris en compte. Il est en attente de validation.';
+                        $success = 'Le BlogPost à bien été publié, il est visible et les internanutes oeuvent le commenter';
                         return $this->allBlockPostMethod($success);
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    public function updateBlogPostMethod()
+    {
+        $dataPost = $this->post->getArrayPost();
+        if(!isset($dataPost) || empty($dataPost)){
+            $id_blogpost = $this->get->getDataGet('idBlogPost');
+            $validBlogPost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
+            if ($validBlogPost !== false){
+                return $this->twig->render(self::TwigCreate,[
+                    'blogPost'=> $validBlogPost,
+                ]);
+            }
+        }else{
+            $cleanData = $this->validator->blogPostValid($dataPost);
+            $id_blogpost = $this->get->getDataGet('idBlogPost');
+            $validBlogPost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
+            if($cleanData !== true){
+                return $this->twig->render(self::TwigCreate,[
+                    'errors'=> $cleanData,
+                    'blogPost'=> $validBlogPost
+                ]);
+            }else{
+                $dateUpdate = date("Y-m-d H:i:s");
+                $newBlogPost = new BlogPost($validBlogPost);
+
+                $newBlogPost->setTitle($this->post->getDataClean($dataPost['title']));
+                $newBlogPost->setChapo($this->post->getDataClean($dataPost['chapo']));
+                $newBlogPost->setContent($this->post->getDataClean($dataPost['content']));
+                $newBlogPost->setDateUpdate($dateUpdate);
+
+                if($this->blogModel->updateBlogPost($newBlogPost, $id_blogpost)){
+                    $success = 'Modification effectué avec succès';
+                    return $this->allBlockPostMethod($success);
                 }
             }
         }
@@ -110,7 +169,7 @@ class BlogPostController extends MasterController
     {
         $dataPost = $this->post->getArrayPost();
         $id_blogpost = $this->get->getDataGet('idBlogPost');
-        $validBlogPost = $this->blogModel->fetchOneBlogpostById($id_blogpost);
+        $validBlogPost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
 
         if(!isset($dataPost) || empty($dataPost) || $validBlogPost == false ){
             $errors = 'Echec, votre commentaire n\'a pas été pris en compte par nos service.';
@@ -142,6 +201,48 @@ class BlogPostController extends MasterController
                 }
             }
         }
+    }
+    /**
+     *
+     */
+    public function deleteCommentMethod()
+    {
+        $id_comment = $this->get->getDataGet('idComment') ;
+        $id_blogpost = $this->get->getDataGet('idBlogPost') ;
+        if(!is_numeric($id_comment) || !is_numeric($id_blogpost)){
+            $this->redirect('home','defaultMethod');
+        }
+        $comment = $this->commentModel->fetchOneCommentById($id_blogpost, $id_comment);
+        if($comment != false){
+            $comment =  $this->commentModel->disableComment($id_comment);
+            ($comment !== false)? $error =['Commentaire supprimé avec succès']:$error = ['Echec de la suppression du commentaire'];
+            return $this->showBlockPostMethod($error, $id_blogpost);
+        }else{
+            $this->redirect('home','defaultMethod');
+        }
+
+    }
+
+
+    /**
+     *
+     */
+    public function publishCommentMethod()
+    {
+        $id_comment = $this->get->getDataGet('idComment') ;
+        $id_blogpost = $this->get->getDataGet('idBlogPost') ;
+        if(!is_numeric($id_comment) || !is_numeric($id_blogpost)){
+            $this->redirect('home','defaultMethod');
+        }
+        $comment = $this->commentModel->fetchOneCommentById($id_blogpost, $id_comment);
+        if($comment != false){
+            $comment =  $this->commentModel->publishComment($id_comment);
+            ($comment !== false)? $error =['Publication réussi']:$error = ['Echec de la publication du commentaire'];
+            return $this->showBlockPostMethod($error, $id_blogpost);
+        }else{
+            $this->redirect('home','defaultMethod');
+        }
+
     }
 
 }

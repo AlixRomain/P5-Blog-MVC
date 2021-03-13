@@ -22,6 +22,22 @@ class BlogPost
     function __construct(Array $datas){
         $this->hydrate($datas);
     }
+    /**
+     * @param mixed $id_blogpost
+     */
+    public function setIdBlogPost($id_blogpost): void
+    {
+        $this->id_blogpost = $id_blogpost;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdBlogPost()
+    {
+        return $this->id_blogpost;
+    }
+
 
     /**
      * @return mixed
