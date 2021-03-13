@@ -35,19 +35,31 @@
                     <p class="post-meta post-preview">Mis à jour le {{ blogPost.dateCreate|date("d/m/Y") }} par
                         <strong>{{blogPost.firstName  }} {{blogPost.lastName  }}</strong>
                     </p>
-                    <p>
-                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                            Commenter
-                        </button>
-                    </p>
-                    <div class="collapse" id="collapseExample">
-                        <form class="col" action="index.php?page=blogPost&method=createCommentPost&idBlogPost={{ blogPost.id_blogPost }}" method="post">
-                            <div class="form-group">
-                                <textarea class="form-control" id="comment" name="comment" placeholder="Taper votre commentaire..." rows="3"></textarea>
-                            </div>
-                            <button type="submit"  class="btn btn-primary">Envoyer</button>
-                        </form>
-                    </div>
+
+                    {% if session.id is not null %}
+                        <p>
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                Commenter
+                            </button>
+                        </p>
+                        <div class="collapse" id="collapseExample">
+                            <form class="col" action="index.php?page=blogPost&method=createCommentPost&idBlogPost={{ blogPost.id_blogPost }}" method="post">
+                                <div class="form-group">
+                                    <textarea class="form-control" id="comment" name="comment" placeholder="Taper votre commentaire..." rows="3"></textarea>
+                                </div>
+                                <button type="submit"  class="btn btn-primary">Envoyer</button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <p>
+                            <a href="index.php?page=login&method=loginMethod&idBlogPost={{ blogPost.id_blogPost }}">
+                                <button class="btn btn-primary" type="button" >
+                                    Commenter
+                                </button>
+                            </a>
+                        </p>
+                    {% endif %}
+
                 </div>
             </div>
 
@@ -72,7 +84,17 @@
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col-xs-2 col-md-1">
-                                    <img src="http://placehold.it/80" class="img-circle img-responsive" alt="" /></div>
+
+                                    {% if session.rank == 'ADMIN' %}
+                                        <div class="action">
+                                            <a href="index.php?page=blogPost&method=deleteCommentMethod&idComment={{ comment.id_comment }}&idBlogPost={{ blogPost.id_blogPost }}">
+                                                <button type="button" class="btn btn-danger btn-xs" title="Suprimmer">
+                                                    <span class="glyphicon glyphicon-trash"><i class="far fa-trash-alt"></i></span>
+                                                </button>
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
                                 <div class="col-xs-10 col-md-11">
                                     <div>
                                         <div class="mic-info">
@@ -83,23 +105,8 @@
                                     <div class="comment-text mb-3">
                                        {{ comment.content }}
                                     </div>
-                                    <div class="action">
-                                        <a href="index.php?page=">
-                                            <button type="button" class="btn btn-primary btn-xs" title="Modifier">
-                                                <span class="glyphicon glyphicon-pencil"><i class="fas fa-edit"></i></span>
-                                            </button>
-                                        </a>
-                                        <a href="index.php?page=blogPost&method=publishCommentMethod&idComment={{ comment.id_comment }}&idBlogPost={{ blogPost.id_blogPost }}">
-                                            <button type="button" class="btn btn-success btn-xs" title="Approuver">
-                                                <span class="glyphicon glyphicon-ok"><i class="far fa-check-square"></i></span>
-                                            </button>
-                                        </a>
-                                        <a href="index.php?page=blogPost&method=deleteCommentMethod&idComment={{ comment.id_comment }}&idBlogPost={{ blogPost.id_blogPost }}">
-                                            <button type="button" class="btn btn-danger btn-xs" title="Suprimmer">
-                                                <span class="glyphicon glyphicon-trash"><i class="far fa-trash-alt"></i></span>
-                                             </button>
-                                        </a>
-                                    </div>
+
+
                                 </div>
                             </div>
                         </li>
