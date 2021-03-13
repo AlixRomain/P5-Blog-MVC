@@ -1,0 +1,11 @@
+.roundedImage{
+  margin: auto;
+  overflow:hidden;
+  border-radius:150px;
+  border-bottom: 5px solid white ;
+  border-left: 5px solid black ;
+  border-top: 5px solid #c69500 ;
+  border-right: 5px solid #10707f ;
+  width:150px;
+  height:150px;
+}

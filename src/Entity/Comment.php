@@ -3,73 +3,33 @@
 
 namespace App\Entity;
 
-
 use App\Controller\Globals\Hydrator;
 
-class BlogPost
+class Comment
 {
     use Hydrator;
-    private $id_blogpost;
-    private $title;
-    private $chapo;
+    private $id_comment;
     private $content;
     private $dateCreate;
-    private $dateUpdate;
     private $publish;
     private $actif;
+    private $id_blogPost;
     private $id_author;
+
 
     function __construct(Array $datas){
         $this->hydrate($datas);
     }
-    /**
-     * @param mixed $id_blogpost
-     */
-    public function setIdBlogPost($id_blogpost): void
-    {
-        $this->id_blogpost = $id_blogpost;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdBlogPost()
-    {
-        return $this->id_blogpost;
-    }
 
 
     /**
      * @return mixed
      */
-    public function getTitle()
+    public function getIdComment()
     {
-        return $this->title;
+        return $this->id_comment;
     }
 
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title): void
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChapo()
-    {
-        return $this->chapo;
-    }
-
-    /**
-     * @param mixed $chapo
-     */
-    public function setChapo($chapo): void
-    {
-        $this->chapo = $chapo;
-    }
 
     /**
      * @return mixed
@@ -101,22 +61,6 @@ class BlogPost
     public function setDateCreate($dateCreate): void
     {
         $this->dateCreate = $dateCreate;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDateUpdate()
-    {
-        return $this->dateUpdate;
-    }
-
-    /**
-     * @param mixed $dateUpdate
-     */
-    public function setDateUpdate($dateUpdate): void
-    {
-        $this->dateUpdate = $dateUpdate;
     }
 
     /**
@@ -154,6 +98,22 @@ class BlogPost
     /**
      * @return mixed
      */
+    public function getIdBlogPost()
+    {
+        return $this->id_blogPost;
+    }
+
+    /**
+     * @param mixed $id_blogPost
+     */
+    public function setIdBlogPost($id_blogPost): void
+    {
+        $this->id_blogPost = $id_blogPost;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getIdAuthor()
     {
         return $this->id_author;
@@ -166,7 +126,6 @@ class BlogPost
     {
         $this->id_author = $id_author;
     }
-
 
 
 }

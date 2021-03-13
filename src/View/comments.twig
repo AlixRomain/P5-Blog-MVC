@@ -1,0 +1,64 @@
+{% extends 'layout/layoutFront.twig' %}
+{% block header %}
+    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="site-heading">
+                        <h1> Nouveaux commentaires! </h1>
+                        <span class="subheading">Vous avez des commentaires en attente de validation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+
+{% block content %}
+    {% if  success is not null   %}
+        <div class="alert alert-success text-center" role="alert">{{ success }}</div>
+    {% endif %}
+
+    <p class="text-center">
+        <a href="index.php?page=blogPost&method=createBlogPostMethod" style="color: white" class="btn btn-primary" >
+            Publier un BlogPost
+        </a>
+    </p>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                {% for comment in comments %}
+                    <div class="post-preview">
+                        <a href="index.php?page=blogPost&method=showBlockPostMethod&idBlogPost={{ comment[0].id_blogPost }}">
+                            <h2 class="post-title">
+                                {{ comment[0].title }}
+                            </h2>
+                        </a>
+                        <div class="row">
+                            {% for com in comment[1] %}
+                            <div class="col-sm-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Commenté le {{ com.dateCreate|date("d/m/Y") }}</h5>
+                                        <span style="font-size: 16px;opacity: 0.7">Par {{ com.firstName }} {{ com.lastName }}</span>
+                                        <p class="card-text">{{ com.content }}</p>
+                                        <a href="index.php?page=blogPost&method=publishCommentMethod&idComment={{ com.id_comment }}&idBlogPost={{ comment[0].id_blogPost }}" class="btn btn-primary">Publier</a>
+                                        <a class="btn btn-danger btn-xs" href="index.php?page=blogPost&method=deleteCommentMethod&idComment={{ com.id_comment }}&idBlogPost={{ comment[0].id_blogPost  }}" class="btn btn-primary"><i class="far fa-trash-alt"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <hr>
+{% endblock %}

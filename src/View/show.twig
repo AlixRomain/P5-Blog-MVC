@@ -15,6 +15,16 @@
     </header>
 {% endblock %}
 {% block content %}
+    <div class="container pb-5">
+        {% if errors %}
+            {% for error in errors %}
+                <div class="alert alert-danger text-center" role="alert">{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+        {% if success%}
+            <div class="alert alert-success text-center" role="alert">{{ success }}</div>
+        {% endif %}
+    </div>
 
     <article>
         <div class="container">
@@ -22,7 +32,7 @@
                 <div class="col-lg-8 col-md-10 mx-auto">
                     <p>{{ blogPost.content }}</p>
 
-                    <p class="post-meta post-preview">Mis à jour le {{ blogPost.dateCreate|date("m/d/Y") }} par
+                    <p class="post-meta post-preview">Mis à jour le {{ blogPost.dateCreate|date("d/m/Y") }} par
                         <strong>{{blogPost.firstName  }} {{blogPost.lastName  }}</strong>
                     </p>
                     <p>
@@ -31,11 +41,11 @@
                         </button>
                     </p>
                     <div class="collapse" id="collapseExample">
-                        <form class="col" action="index.php?page=comment&method=createComment&idBlogPost={{ blogPost.idBlogPost}}" method="post">
+                        <form class="col" action="index.php?page=blogPost&method=createCommentPost&idBlogPost={{ blogPost.id_blogPost }}" method="post">
                             <div class="form-group">
                                 <textarea class="form-control" id="comment" name="comment" placeholder="Taper votre commentaire..." rows="3"></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Envoyer</button>
+                            <button type="submit"  class="btn btn-primary">Envoyer</button>
                         </form>
                     </div>
                 </div>
@@ -66,7 +76,7 @@
                                 <div class="col-xs-10 col-md-11">
                                     <div>
                                         <div class="mic-info">
-                                           <strong> Par: {{ comment.firstName}} {{ comment.lastName}}  le {{ comment.dateCreate|date("m/d/Y") }}</strong>
+                                           <strong> Par: {{ comment.firstName}} {{ comment.lastName}}  le {{ comment.dateCreate|date("d/m/Y") }}</strong>
                                         </div>
                                         <span >{{ comment.pseudo}}</span>
                                     </div>
@@ -79,12 +89,12 @@
                                                 <span class="glyphicon glyphicon-pencil"><i class="fas fa-edit"></i></span>
                                             </button>
                                         </a>
-                                        <a href="index.php?page=">
+                                        <a href="index.php?page=blogPost&method=publishCommentMethod&idComment={{ comment.id_comment }}&idBlogPost={{ blogPost.id_blogPost }}">
                                             <button type="button" class="btn btn-success btn-xs" title="Approuver">
                                                 <span class="glyphicon glyphicon-ok"><i class="far fa-check-square"></i></span>
                                             </button>
                                         </a>
-                                        <a href="index.php?page=">
+                                        <a href="index.php?page=blogPost&method=deleteCommentMethod&idComment={{ comment.id_comment }}&idBlogPost={{ blogPost.id_blogPost }}">
                                             <button type="button" class="btn btn-danger btn-xs" title="Suprimmer">
                                                 <span class="glyphicon glyphicon-trash"><i class="far fa-trash-alt"></i></span>
                                              </button>

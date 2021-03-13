@@ -23,6 +23,7 @@ class GetController
         $def = array(
             'page' => FILTER_SANITIZE_SPECIAL_CHARS,//Echappe les caractères spéciaux
             'idBlogPost' => FILTER_SANITIZE_NUMBER_INT,//Ne garde que chiffre, +, -
+            'idComment' => FILTER_SANITIZE_NUMBER_INT,//Ne garde que chiffre, +, -
             'idUser' => FILTER_SANITIZE_NUMBER_INT
         );
 

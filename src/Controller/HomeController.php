@@ -20,4 +20,8 @@ class HomeController extends MasterController
     {
         return $this->twig->render('about.twig');
     }
+    public function contactMethod()
+    {
+
+    }
 }

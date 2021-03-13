@@ -21,6 +21,7 @@ class MasterModel
         }
 
     }
+
     //Voir pour refactoriser avec dans le fetch. la requte qui finit par AND Article.idArticle = :id)
     //puis dans execute 'id'=> $id   $id etant deuxieme param de read.
     /**
@@ -35,7 +36,7 @@ class MasterModel
     }
 
     /**
-     * @param $statement
+     * @param $req
      * @param array $array
      * @return bool|\PDOStatement
      */

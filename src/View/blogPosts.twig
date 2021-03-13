@@ -43,7 +43,12 @@
                         </a>
                         <p class="post-meta">Rédigé par
                             <a href="index.php?page=blogPost&method=showBlockPostMethod&idBlogPost={{ blogPost.id_blogPost }}">{{blogPost.firstName  }} {{blogPost.lastName  }}</a>
-                            le {{ blogPost.dateCreate|date("m/d/Y") }}
+                            le {{ blogPost.dateCreate|date("d/m/Y") }}
+                        </p>
+
+                        <p>
+                            <a href="index.php?page=blogPost&method=updateBlogPostMethod&idBlogPost={{ blogPost.id_blogPost }}" class="btn btn-primary">Modifier</a>
+                            <a class="btn btn-danger btn-xs" href="index.php?page=blogPost&method=deleteBlogPostMethod&idBlogPost={{ blogPost.id_blogPost  }}" class="btn btn-primary"><i class="far fa-trash-alt"></i></a>
                         </p>
                     </div>
                     <hr>

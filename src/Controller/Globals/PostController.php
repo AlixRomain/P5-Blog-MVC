@@ -19,6 +19,7 @@ class PostController
      */
     public function __construct()
     {
+
         $this->post = filter_input_array(INPUT_POST);
     }
 

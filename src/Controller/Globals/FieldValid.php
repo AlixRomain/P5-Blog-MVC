@@ -18,4 +18,8 @@ class FieldValid
         $error = "Veuillez insérer votre contenu.";
         return (empty($content) )?$error: true;
     }
+    public function commentValidator($comment){
+        $error = "Veuillez insérer un commentaire.";
+        return (empty($comment) )?$error: true;
+    }
 }

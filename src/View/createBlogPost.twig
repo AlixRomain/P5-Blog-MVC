@@ -28,25 +28,30 @@
                 <div class="alert alert-success text-center" role="alert">{{ success }}</div>
             {% endif %}
         </div>
-
+        {% if blogPost is defined  %}
+        <form action="index.php?page=blogPost&method=updateBlogPostMethod&idBlogPost={{ blogPost.id_blogPost }}" method="post">
+        {% else %}
         <form action="index.php?page=blogPost&method=createBlogPostMethod" method="post">
-
+        {% endif %}
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Votre titre"  id="title" name="title" required data-validation-required-message="Veuillez entrer un titre.">
+                <input type="text" class="form-control"  placeholder="Votre titre" value="{{ blogPost.title }}"  id="title" name="title" required data-validation-required-message="Veuillez entrer un titre.">
                 <p class="help-block text-danger"></p>
             </div>
 
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Votre phrase d'accroche" id="chapo" name="chapo" required data-validation-required-message="Veuillez entrer une accroche.">
+                <input type="text" class="form-control" placeholder="Votre phrase d'accroche" value="{{ blogPost.chapo }}" id="chapo" name="chapo" required data-validation-required-message="Veuillez entrer une accroche.">
                 <p class="help-block text-danger"></p>
             </div>
 
             <div class="form-group">
-                <textarea type="text" class="form-control" placeholder="Que voulez-vous dire..." rows="10" id="content" name="content" required data-validation-required-message="Veuillez entrer un contenu."></textarea>
+                <textarea type="text" class="form-control"  placeholder="Que voulez-vous dire..."  rows="10" id="content" name="content" required data-validation-required-message="Veuillez entrer un contenu.">{{ blogPost.content }}</textarea>
                 <p class="help-block text-danger"></p>
             </div>
-
-            <button type="submit" class="btn btn-primary">Créer</button>
+            {% if blogPost is defined  %}
+            <button type="submit" class="btn btn-primary">Modifier</button>
+            {% else %}
+                <button type="submit" class="btn btn-primary">Créer</button>
+            {% endif %}
         </form>
 
     </div>
