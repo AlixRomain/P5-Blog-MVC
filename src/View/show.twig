@@ -36,7 +36,7 @@
                         <strong>{{blogPost.firstName  }} {{blogPost.lastName  }}</strong>
                     </p>
 
-                    {% if session.id is not null %}
+                    {% if session.id_user is not null %}
                         <p>
                             <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                 Commenter
@@ -83,7 +83,7 @@
                         {% for comment in comments %}
                         <li class="list-group-item">
                             <div class="row">
-                                <div class="col-xs-2 col-md-1">
+                                <div class="col-xs-2 col-md-2">
 
                                     {% if session.rank == 'ADMIN' %}
                                         <div class="action">
@@ -95,7 +95,7 @@
                                         </div>
                                     {% endif %}
                                 </div>
-                                <div class="col-xs-10 col-md-11">
+                                <div class="col-xs-10 col-md-10">
                                     <div>
                                         <div class="mic-info">
                                            <strong> Par: {{ comment.firstName}} {{ comment.lastName}}  le {{ comment.dateCreate|date("d/m/Y") }}</strong>

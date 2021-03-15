@@ -46,5 +46,37 @@ class SessionController
     {
         return $this->user;
     }
+    /**
+     * @return mixed
+     */
+    public function validAdmin()
+    {
+        if(isset($_SESSION['user'])){
+           return ($_SESSION['user']['rank'] === 'ADMIN')? true: null;
+        }else{
+            return null;
+        }
+    }
+    /**
+     * @return mixed
+     */
+    public function validUser()
+    {
+        if(isset($_SESSION['user'])){
+           return (($_SESSION['user']['rank'] === 'UTILISATEUR') || ($_SESSION['user']['rank'] === 'ADMIN'))? true: null;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function validPassUser($pass1,$pass2)
+    {
+        return($pass1 !== $pass2)? null: true;
+    }
+
+
 
 }

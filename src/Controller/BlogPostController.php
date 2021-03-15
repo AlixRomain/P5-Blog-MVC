@@ -23,6 +23,16 @@ class BlogPostController extends MasterController
      */
     const TwigCreate = 'createBlogPost.twig';
 
+    private $adminOk;
+    private $userOk;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->adminOk = $this->session->validAdmin();
+        $this->userOk = $this->session->validUser();
+    }
+
     /**
      * @param null $msg
      * @return string
@@ -64,18 +74,18 @@ class BlogPostController extends MasterController
     public function deleteBlogPostMethod()
     {
         $id_blogpost = $this->get->getDataGet('idBlogPost') ;
-        if(!is_numeric($id_blogpost)){
+        if(!is_numeric($id_blogpost) || is_null($this->adminOk)){
             $this->redirect('home','defaultMethod');
-        }
-        $blogPost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
-        if($blogPost != false){
-            $blogPost =  $this->blogModel->disableBlogPost($id_blogpost);
-            ($blogPost !== false)? $error ='BlogPost supprimé avec succès':$error = 'Echec de la suppression du blogPost';
-            return $this->allBlockPostMethod($error);
         }else{
-            $this->redirect('home','defaultMethod');
+            $blogPost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
+            if($blogPost != false){
+                $blogPost =  $this->blogModel->disableBlogPost($id_blogpost);
+                ($blogPost !== false)? $error ='BlogPost supprimé avec succès':$error = 'Echec de la suppression du blogPost';
+                return $this->allBlockPostMethod($error);
+            }else{
+                $this->redirect('home','defaultMethod');
+            }
         }
-
     }
     /**
      *
@@ -83,7 +93,7 @@ class BlogPostController extends MasterController
     public function createBlogPostMethod()
     {
         $dataPost = $this->post->getArrayPost();
-        if(!isset($dataPost) || empty($dataPost)){
+        if(!isset($dataPost) || empty($dataPost) || is_null($this->adminOk)){
             return $this->twig->render(self::TwigCreate);
         }else{
 
@@ -129,7 +139,7 @@ class BlogPostController extends MasterController
     public function updateBlogPostMethod()
     {
         $dataPost = $this->post->getArrayPost();
-        if(!isset($dataPost) || empty($dataPost)){
+        if(!isset($dataPost) || empty($dataPost) || is_null($this->adminOk)){
             $id_blogpost = $this->get->getDataGet('idBlogPost');
             $validBlogPost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
             if ($validBlogPost !== false){
@@ -175,6 +185,9 @@ class BlogPostController extends MasterController
             $errors = 'Echec, votre commentaire n\'a pas été pris en compte par nos service.';
             return $this->allBlockPostMethod($errors);
         }else{
+            if(is_null($this->userOk)){
+                $this->redirect('home','defaultMethod');
+            }
             //Si je rafraichit la page et que j'ai déjà ce post e nbase je reroute
             $exist = $this->commentModel->fetchOneCommentPostByContent($id_blogpost, $this->post->getDataClean($dataPost['comment']));
             if ($exist !== false ){
@@ -207,9 +220,10 @@ class BlogPostController extends MasterController
      */
     public function deleteCommentMethod()
     {
+
         $id_comment = $this->get->getDataGet('idComment') ;
         $id_blogpost = $this->get->getDataGet('idBlogPost') ;
-        if(!is_numeric($id_comment) || !is_numeric($id_blogpost)){
+        if(!is_numeric($id_comment) || !is_numeric($id_blogpost) || is_null($this->adminOk)){
             $this->redirect('home','defaultMethod');
         }
         $comment = $this->commentModel->fetchOneCommentById($id_blogpost, $id_comment);
@@ -220,29 +234,7 @@ class BlogPostController extends MasterController
         }else{
             $this->redirect('home','defaultMethod');
         }
-
     }
 
-
-    /**
-     *
-     */
-    public function publishCommentMethod()
-    {
-        $id_comment = $this->get->getDataGet('idComment') ;
-        $id_blogpost = $this->get->getDataGet('idBlogPost') ;
-        if(!is_numeric($id_comment) || !is_numeric($id_blogpost)){
-            $this->redirect('home','defaultMethod');
-        }
-        $comment = $this->commentModel->fetchOneCommentById($id_blogpost, $id_comment);
-        if($comment != false){
-            $comment =  $this->commentModel->publishComment($id_comment);
-            ($comment !== false)? $error =['Publication réussi']:$error = ['Echec de la publication du commentaire'];
-            return $this->showBlockPostMethod($error, $id_blogpost);
-        }else{
-            $this->redirect('home','defaultMethod');
-        }
-
-    }
 
 }

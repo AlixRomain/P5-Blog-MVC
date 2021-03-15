@@ -1,0 +1,89 @@
+{% extends 'layout/layoutFront.twig' %}
+{% block header %}
+    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="site-heading">
+                        <h1>Inscription</h1>
+                        <span class="subheading">Entrez dans la légende!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="container pb-5">
+            {% if errors %}
+                {% for error in errors %}
+                    <div class="alert alert-danger text-center" role="alert">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+            {% if success%}
+                <div class="alert alert-success text-center" role="alert">{{ success }}</div>
+            {% endif %}
+        </div>
+        <h3 class=" m-auto text-center ">Formulaire d'inscription</h3>
+        <form class=" m-auto  col-lg-8 text-center" action="index.php?page=login&method=createAccountMethod" method="post">
+            <div class="row mt-3 ">
+                <div class="col controls">
+                    <input type="text" name="firstName" class="form-control" placeholder="Votre Nom" value="{{ user.firstName }}" id="firstName" required data-validation-required-message="Veuillez entrer votre nom.">
+                    <p class="help-block text-danger"></p>
+                </div>
+                <div class="col">
+                    <input type="text" name="lastName" class="form-control" placeholder="Votre Prénom" id="lastName" value="{{ user.lastName }}" required data-validation-required-message="Veuillez entrer votre prénom.">
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group  col">
+                    <input type="email" class="form-control"  placeholder="@email" value="{{ user.email }}"  id="email" name="email" required data-validation-required-message="veuillez entrer votre adresse email">
+                    <p class="help-block text-danger"></p>
+                </div>
+                <div class="form-group col">
+                    <input type="text" class="form-control"  placeholder="Entrez votre pseudo" value="{{ user.pseudo }}"  id="pseudo" name="pseudo" required data-validation-required-message="Veuillez entrer votre pseudo.">
+                    <p class="help-block text-danger"></p>
+                </div>
+            </div>
+            <div class="form-group ">
+                <input type="text" class="form-control"  placeholder="Qu'elle est votre devise ?" value="{{ user.devise }}"  id="pseudo" name="devise">
+                <p class="help-block text-danger"></p>
+            </div>
+            <div class="input-group" id="show_hide_password">
+                <input class="form-control" type="password" placeholder="Entrez votre mot de passe" name="pass1" value="{{ user.pass1 }}" required data-validation-required-message="Veuillez entrer votre mot de passe.">
+                <div class="input-group-addon">
+                    <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <p class="help-block text-danger"></p>
+
+            <div class="input-group" id="show_hide_password">
+                <input class="form-control" type="password" placeholder="Saisissez à nouveau votre mot de passe" name="pass2"  required data-validation-required-message="Veuillez entrer votre mot de passe.">
+                <div class="input-group-addon">
+                    <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <p class="help-block text-danger"></p>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2">
+                        <input type="checkbox" class="mr-auto"  id="rgpd" name="rgpd" required data-validation-required-message="Veuillez accepter les conditions pour finaliser votre inscription">
+                    </div>
+                    <div class="col-md-10 text-left">
+                        <label for="rgpd" style="font-size: 14px">  En soumettant ce formulaire, j’accepte que mes informations soient utilisées exclusivement dans le cadre de ma demande. </label>
+                    </div>
+                </div>
+                <p class="help-block text-danger"></p>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Inscription</button>
+        </form>
+    </div>
+{% endblock %}

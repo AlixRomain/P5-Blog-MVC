@@ -12,7 +12,7 @@ class Validator extends FieldValid
     /**
      *
      */
-    public function blogPostValid($datas)
+    public function blogPostValid(Array $datas)
     {
         $errors = [];
         foreach ($datas as $k => $v ){
@@ -20,6 +20,21 @@ class Validator extends FieldValid
            $fieldValidvalid = $this->$fieldValid($v);
            if($fieldValidvalid !== true)
            array_push($errors,$fieldValidvalid);
+        }
+        return (empty($errors))?true:$errors;
+    }
+
+    /**
+     *
+     */
+    public function newUserValid(Array $datas)
+    {
+        $errors = [];
+        foreach ($datas as $k => $v ){
+            $fieldValid = $k.'Validator';
+            $fieldValidvalid = $this->$fieldValid($v);
+            if($fieldValidvalid !== true)
+                array_push($errors,$fieldValidvalid);
         }
         return (empty($errors))?true:$errors;
     }

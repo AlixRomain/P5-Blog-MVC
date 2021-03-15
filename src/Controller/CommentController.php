@@ -8,6 +8,16 @@ use App\Entity\BlogPost;
 use App\Entity\Comment;
 class CommentController extends MasterController
 {
+
+    private $adminOk;
+    private $userOk;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->adminOk = $this->session->validAdmin();
+        $this->userOk = $this->session->validUser();
+    }
     /**
      *@var Template
      */
@@ -22,17 +32,40 @@ class CommentController extends MasterController
      */
     public function allCommentDisableMethod($msg = null)
     {
-
-        $blogPosts = $this->blogModel->fetchAllBlogPostWithCommentDisable();
-        $onePostForComments=[];
-        foreach ($blogPosts as $blogPost){
-            $comments = $this->commentModel->fetchAllCommentDisable($blogPost['id_blogPost']);
-            array_push($onePostForComments,[$blogPost,$comments]);
+        if(is_null($this->adminOk)){
+            $this->redirect('home','defaultMethod');
+        }else{
+            $blogPosts = $this->blogModel->fetchAllBlogPostWithCommentDisable();
+            $onePostForComments=[];
+            foreach ($blogPosts as $blogPost){
+                $comments = $this->commentModel->fetchAllCommentDisable($blogPost['id_blogPost']);
+                array_push($onePostForComments,[$blogPost,$comments]);
+            }
+            return $this->twig->render(self::TwigAllComment,
+                ['comments'=> $onePostForComments,
+                    'success'=> $msg
+                ]);
         }
-        return $this->twig->render(self::TwigAllComment,
-            ['comments'=> $onePostForComments,
-                'success'=> $msg
-            ]);
+    }
+
+    /**
+     *
+     */
+    public function publishCommentMethod()
+    {
+        $id_comment = $this->get->getDataGet('idComment') ;
+        $id_blogpost = $this->get->getDataGet('idBlogPost') ;
+        if(!is_numeric($id_comment) || !is_numeric($id_blogpost) || is_null($this->adminOk)){
+            $this->redirect('home','defaultMethod');
+        }
+        $comment = $this->commentModel->fetchOneCommentById($id_blogpost, $id_comment);
+        if($comment != false){
+            $comment =  $this->commentModel->publishComment($id_comment);
+            ($comment !== false)? $error ='Publication réussi':$error = 'Echec de la publication du commentaire';
+            return $this->allCommentDisableMethod($error);
+        }else{
+            $this->redirect('home','defaultMethod');
+        }
     }
 
 }
