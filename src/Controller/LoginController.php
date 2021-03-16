@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Controller\Globals\MasterController;
 use App\Entity\User;
+use MongoDB\BSON\Timestamp;
 use Twig\Token;
 
 class LoginController extends MasterController
@@ -64,6 +65,7 @@ class LoginController extends MasterController
                 //j'hydrate l'objet et je l'insère en base
                 $date 		= new \DateTime();
                 $dateCreate = $date->format('Y-m-d H:i:s');
+
                 $token 	= time().rand(1000000,9000000);
 
                 $date->setTimestamp(strtotime("+15 minutes"));
@@ -85,7 +87,7 @@ class LoginController extends MasterController
                 ]);
 
                 if($this->userModel->createUser($user)){
-                    $success = 'Votre inscription à bien été pris en compte. Pour la finaliser veuillez vous rendre sur votre boîte mail pour confirmer le lien que nous vous avons envoyé.';
+                    $success = 'Votre inscription à bien été pris en compte. Pour la finaliser veuillez vous rendre sur votre boîte mail à fin de confirmer le lien que nous vous avons envoyé.';
                     return $this->twig->render('Admin/login.twig',[
                          'success' => $success
                     ]);
@@ -95,11 +97,37 @@ class LoginController extends MasterController
             }
 
         }else{
-            return $this->twig->render('Admin/createAccount.twig',[
-                // 'errors' => $errors
+            return $this->twig->render('Admin/createAccount.twig');
+        }
+    }
+
+    public function registerMethod(){
+        //index.php?page=login&method=registerMethod&token='16158822074289917'
+        $token = $this->get->getDataGet('token');
+        $tokenValid = $this->userModel->oneUserByTokenValid($token);
+
+        if($tokenValid !== false){
+            echo 'julie';
+            $this->userModel->activAccount($token);
+            $success = 'Votre compte est désormais valide. Veuillez entrer vos identifiants pour accéder à la plateforme.';
+            return $this->twig->render('Admin/login.twig',[
+                'success' => $success
+            ]);
+        }else{
+            //Remodifié le token
+            $newToken 	= time().rand(1000000,9000000);
+            $this->userModel->setNewToken($token, $newToken);
+            //Envoi d'un nouveau email.
+
+
+            $errors = ['Vous avez dépassé le temps imparti pour activer votre compte. Nous vous avons envoyé un nouveau lien sur votre boîte mail. Vous avez de nouveau 15 min pour le valider.'];
+            return $this->twig->render('Admin/login.twig',[
+                'errors' => $errors,
+                'NewToken'=> $token
             ]);
         }
     }
+
 
     public function logoutMethod()
     {

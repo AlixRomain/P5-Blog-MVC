@@ -12,6 +12,7 @@ class MasterModel
      */
     public function fetch($req)
     {
+        var_dump($req);
         try {
             $req = Connexion::getPDO()->prepare($req);
             $req->execute();

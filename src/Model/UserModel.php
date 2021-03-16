@@ -62,4 +62,50 @@ class UserModel extends MasterModel
 
         return $this->execArray($req, $user);
     }
+
+    /**
+     * @return array
+     */
+    public function setNewToken($token, $newToken)
+    {
+
+        /**
+         * @return array
+         * Retourne
+         */
+        return $this->fetch('
+            UPDATE  user SET
+            token = '.$newToken.'
+            WHERE user.token = '.$token);
+    }
+    /**
+     * @return array
+     */
+    public function activAccount($token)
+    {
+
+        /**
+         * @return array
+         * Retourne
+         */
+        return $this->fetch('
+            UPDATE  user SET
+            actif = 1
+            WHERE user.token = '.$token);
+    }
+
+    /**
+     * @return array
+     */
+    public function oneUserByTokenValid($token)
+    {
+        /**
+         * @return array
+         * Retourne
+         */
+        return $this->fetch('
+            SELECT * FROM user 
+             WHERE token = '.$token.' 
+            AND dateTokenExpire >= NOW()');
+    }
 }
