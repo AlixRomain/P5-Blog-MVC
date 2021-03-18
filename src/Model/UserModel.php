@@ -66,17 +66,18 @@ class UserModel extends MasterModel
     /**
      * @return array
      */
-    public function setNewToken($token, $newToken)
+    public function setNewTokenAndDateExpi($user)
     {
-
         /**
          * @return array
          * Retourne
          */
+        $date = Connexion::getPDO()->quote($user->getDateTokenExpire());
         return $this->fetch('
             UPDATE  user SET
-            token = '.$newToken.'
-            WHERE user.token = '.$token);
+            token = '.$user->getToken().',
+            dateTokenExpire = '.$date.'
+            WHERE user.id_user = '.$user->getIdUser());
     }
     /**
      * @return array
@@ -107,5 +108,31 @@ class UserModel extends MasterModel
             SELECT * FROM user 
              WHERE token = '.$token.' 
             AND dateTokenExpire >= NOW()');
+    }
+    /**
+     * @return array
+     */
+    public function fetchOneUserByToken($token)
+    {
+        /**
+         * @return array
+         * Retourne
+         */
+        return $this->fetch('
+            SELECT * FROM user 
+             WHERE token = '.$token);
+    }
+    /**
+     * @return array
+     */
+    public function isExistToken($token)
+    {
+        /**
+         * @return array
+         * Retourne
+         */
+        return $this->fetch('
+            SELECT * FROM user 
+             WHERE token = '.$token);
     }
 }

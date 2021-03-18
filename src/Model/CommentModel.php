@@ -21,7 +21,10 @@ class CommentModel extends MasterModel
             ON user.id_user = comment.id_author
             WHERE comment.publish = 1
             AND comment.actif = 1
-            AND comment.id_blogpost ='. $id_blogpost);
+            AND comment.id_blogpost ='.$id_blogpost.'
+            ORDER BY comment.dateCreate DESC
+            ');
+
     }
     /**
      * @return array
@@ -120,7 +123,8 @@ class CommentModel extends MasterModel
             ON user.id_user = comment.id_author
             WHERE comment.publish = 0
             AND comment.actif = 1
-            AND comment.id_blogPost= '.$id_blogPost);
+            AND comment.id_blogPost= '.$id_blogPost.'
+            ORDER BY comment.dateCreate DESC');
     }
 
 }

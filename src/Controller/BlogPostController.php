@@ -125,7 +125,7 @@ class BlogPostController extends MasterController
                     ]);
 
                     if($this->blogModel->createBlogPost($blogPost)){
-                        $success = 'Le BlogPost à bien été publié, il est visible et les internanutes oeuvent le commenter';
+                        $success = 'Le BlogPost à bien été publié, les internanutes peuvent dés à présent le commenter';
                         return $this->allBlockPostMethod($success);
                     }
                 }

@@ -22,7 +22,6 @@ class LoginController extends MasterController
             ]);
         }
         $dataUser = $this->post->getArrayPost();
-        var_dump($dataUser);
         if(isset($dataUser) && !empty($dataUser)){
             $email = $dataUser['email'];
             $password = $dataUser['pass'];
@@ -67,7 +66,6 @@ class LoginController extends MasterController
                 $dateCreate = $date->format('Y-m-d H:i:s');
 
                 $token 	= time().rand(1000000,9000000);
-
                 $date->setTimestamp(strtotime("+15 minutes"));
                 $date_token	= $date->format('Y-m-d H:i:s');
 
@@ -104,28 +102,84 @@ class LoginController extends MasterController
     public function registerMethod(){
         //index.php?page=login&method=registerMethod&token='16158822074289917'
         $token = $this->get->getDataGet('token');
-        $tokenValid = $this->userModel->oneUserByTokenValid($token);
+        $user = $this->userModel->fetchOneUserByToken($token);
+        if($user !== false){
+            $tokenValid = $this->userModel->oneUserByTokenValid($token);
+            var_dump($tokenValid);
+            if($tokenValid !== false){
+                $this->userModel->activAccount($token);
+                $success = 'Votre compte est désormais valide. Veuillez entrer vos identifiants pour accéder à la plateforme.';
+                return $this->twig->render('Admin/login.twig',[
+                    'success' => $success
+                ]);
+            }else{
+                //Remodifié le token
 
-        if($tokenValid !== false){
-            echo 'julie';
-            $this->userModel->activAccount($token);
-            $success = 'Votre compte est désormais valide. Veuillez entrer vos identifiants pour accéder à la plateforme.';
-            return $this->twig->render('Admin/login.twig',[
-                'success' => $success
-            ]);
-        }else{
-            //Remodifié le token
-            $newToken 	= time().rand(1000000,9000000);
-            $this->userModel->setNewToken($token, $newToken);
-            //Envoi d'un nouveau email.
+                $user= new User($user);
+                $newToken 	= time().rand(1000000,9000000);
+                $date = new \DateTime();
+                $date->setTimestamp(strtotime("+15 minutes"));
+                $newDateExpi = $date->format('Y-m-d H:i:s');
+                $user->setToken($newToken);
+                $user->setDateTokenExpire($newDateExpi);
+                $this->userModel->setNewTokenAndDateExpi($user);
+                //Envoi d'un nouveau email.
 
 
-            $errors = ['Vous avez dépassé le temps imparti pour activer votre compte. Nous vous avons envoyé un nouveau lien sur votre boîte mail. Vous avez de nouveau 15 min pour le valider.'];
-            return $this->twig->render('Admin/login.twig',[
-                'errors' => $errors,
-                'NewToken'=> $token
-            ]);
+                $errors = ['Vous avez dépassé le temps imparti pour activer votre compte. Nous vous avons envoyé un nouveau lien sur votre boîte mail. Vous avez de nouveau 15 min pour le valider.'];
+                return $this->twig->render('Admin/login.twig',[
+                    'errors' => $errors,
+                    'NewToken'=> $token
+                ]);
+            }
         }
+        $errors = ['Nous avons rencontré une erreur, veuillez réessayer de vous connecter ultérieurement','Code ERROR : Jeton Token introuvable en base'];
+
+        return $this->twig->render('Admin/login.twig',[
+            'errors' => $errors,
+            'NewToken'=> $token
+        ]);
+
+    }
+    public function passForgetMethod(){
+
+        $dataUser = $this->post->getArrayPost();
+        if(isset($dataUser) && !empty($dataUser)) {
+            //Je passe les datas au validator:
+            $cleanData = $this->validator->newUserValid($dataUser);
+            if ($cleanData !== true) {
+                return $this->twig->render('Admin/createAccount.twig', ['errors' => $cleanData, 'user' => $dataUser]);
+            }else{
+                $userConfirm = $this->userModel->fetchOneUserByEmail($dataUser['email']);
+               if($userConfirm !== false){
+                   //Remodifié le token et sa date d'expiration
+                   $user = new User($userConfirm);
+                   $newToken 	= time().rand(1000000,9000000);
+                   $date = new \DateTime();
+                   $date->setTimestamp(strtotime("+15 minutes"));
+                   $newDateExpi = $date->format('Y-m-d H:i:s');
+                   $user->setToken($newToken);
+                   $user->setDateTokenExpire($newDateExpi);
+                   $this->userModel->setNewTokenAndDateExpi($user);
+                   //Envoi d'un nouveau email.
+
+                   //j'envoie le mail
+                   $success = 'Nous venons de vous envoyer un nouveau liens d\'activation, vous avez à présent 15 min pour réinitialiser votre mot de passe';
+                   return $this->twig->render('Admin/login.twig',[
+                       'success' => $success
+                   ]);
+               }else{
+                   $errors = ['Nous n\'avons pas de compte avec cette adresse mail chez nous, veuillez vous inscrire.'];
+                   return $this->twig->render('Admin/createAccount.twig',[
+                       'errors' => $errors
+                   ]);
+               }
+            }
+        }
+        return $this->twig->render('Admin/forget.twig',[
+            'errors' => '',
+            'success'=> ''
+        ]);
     }
 
 

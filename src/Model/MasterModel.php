@@ -12,7 +12,6 @@ class MasterModel
      */
     public function fetch($req)
     {
-        var_dump($req);
         try {
             $req = Connexion::getPDO()->prepare($req);
             $req->execute();
@@ -31,6 +30,7 @@ class MasterModel
      */
     public function fetchAll($req)
     {
+
         $req = Connexion::getPDO()->prepare($req);
         $req->execute();
         return $req->fetchAll();
@@ -43,6 +43,7 @@ class MasterModel
      */
     public function execArray($req, $array = [])
     {
+
         $req = Connexion::getPDO()->prepare($req);
         return $req->execute($array);
     }
