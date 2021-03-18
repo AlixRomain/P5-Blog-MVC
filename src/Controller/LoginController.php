@@ -11,13 +11,17 @@ use Twig\Token;
 
 class LoginController extends MasterController
 {
+    /**
+     *@var Template
+     */
+    const TwigLogin = 'Admin/login.twig';
 
     public function loginMethod( $msg = null)
     {
         $idBlogPost = $this->get->getDataGet('idBlogPost');
         if(is_numeric($idBlogPost)){
             $errors = ['Vous devez être connecter pour commenter sur notre blog'];
-            return $this->twig->render('Admin/login.twig',[
+            return $this->twig->render(self::TwigLogin,[
                 'errors' => $errors
             ]);
         }
@@ -31,12 +35,12 @@ class LoginController extends MasterController
                 $this->redirect('blogPost','allBlockPostMethod');
             }else{
                 $errors = ['Les identifiants ne sont pas valides.'];
-                return $this->twig->render('Admin/login.twig',[
+                return $this->twig->render(self::TwigLogin,[
                     'errors' => $errors
                 ]);
             }
         }else{
-            return $this->twig->render('Admin/login.twig',[ 'success' => $msg]);
+            return $this->twig->render(self::TwigLogin,[ 'success' => $msg]);
         }
     }
 
@@ -85,13 +89,16 @@ class LoginController extends MasterController
                 ]);
 
                 if($this->userModel->createUser($user)){
-                    $success = 'Votre inscription à bien été pris en compte. Pour la finaliser veuillez vous rendre sur votre boîte mail à fin de confirmer le lien que nous vous avons envoyé.';
-                    return $this->twig->render('Admin/login.twig',[
-                         'success' => $success
-                    ]);
+                    //Si insertion Ok j'envoit enn email
+                    $mailOk =  $this->mailer->sendCreateAccountEmail($user);
+                    if($mailOk !== 1){
+                        $errors = ['Nous rencontrons un problème pour vous envoyer votre lien d\'activation, merci de réessayer dans un petit moment.'];
+                        return $this->twig->render(self::TwigLogin,['success' => $errors] );
+                    }else{
+                        $success = 'Votre inscription à bien été pris en compte. Un lien d\'activation vient de vous être envoyé sur votre messagerie "'.$user->getEmail().'" vous avez à présent 15 min pour vous authentifier.';
+                        return $this->twig->render(self::TwigLogin,['success' => $success] );
+                    }
                 }
-                return 'loooser';
-                //Si insertion Ok j'envoit enn email
             }
 
         }else{
@@ -105,7 +112,6 @@ class LoginController extends MasterController
         $user = $this->userModel->fetchOneUserByToken($token);
         if($user !== false){
             $tokenValid = $this->userModel->oneUserByTokenValid($token);
-            var_dump($tokenValid);
             if($tokenValid !== false){
                 $this->userModel->activAccount($token);
                 $success = 'Votre compte est désormais valide. Veuillez entrer vos identifiants pour accéder à la plateforme.';
