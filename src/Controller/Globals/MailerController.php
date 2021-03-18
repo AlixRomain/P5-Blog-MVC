@@ -72,4 +72,40 @@ class MailerController
         $result = $mailer->send($message);
         return $result;
     }
+    /**
+     * @param  $user
+     * @return int
+     */
+    public function sendNewLinkActivation($user)
+    {
+        // Create the Transport
+        $transport = (new Swift_SmtpTransport(MAIL_SMTP, MAIL_PORT, 'ssl'))
+            ->setUsername(MAIL_USERNAME)
+            ->setPassword(MAIL_PASSWORD);
+        // Create the Mailer using your created Transport
+        $mailer = new Swift_Mailer($transport);
+
+        // Create a message
+        $token = $user->getToken();
+        //http:// si localHost www.
+        $link = "http://". filter_input(INPUT_SERVER, 'HTTP_HOST')."/index.php?page=login&idUser=".$user->getIdUser()."&method=newPassMethod&token=" .$token;
+        $content = sprintf('<h1>Enfin de retour parmis nous '.$user->getFirstName(). $user->getLastName().'</h1>
+							<p>Voici le lien à cliquer pour réinitialiser votre mot de passe.</p>
+							<p>Veuillez cliquer sur ce lien :</p>
+							<p>
+							<a 
+							href=\''.$link.'\'
+							title=\"Activer le compte\">
+							Je modifie mon mot de passe sur le blog de Romain.
+							</a>
+							</p>
+            ');
+        $message = (new Swift_Message('Création de votre comte "Le blog de Romain"'))
+            ->setFrom(['blogderomain@blog.com' => 'Romain'.' '.'Alix'])
+            ->setTo($user->getEmail())
+            ->setBody($content, 'text/html');
+        // Send the message
+        $result = $mailer->send($message);
+        return $result;
+    }
 }

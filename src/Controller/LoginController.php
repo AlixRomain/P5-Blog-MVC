@@ -130,13 +130,17 @@ class LoginController extends MasterController
                 $user->setDateTokenExpire($newDateExpi);
                 $this->userModel->setNewTokenAndDateExpi($user);
                 //Envoi d'un nouveau email.
-
-
-                $errors = ['Vous avez dépassé le temps imparti pour activer votre compte. Nous vous avons envoyé un nouveau lien sur votre boîte mail. Vous avez de nouveau 15 min pour le valider.'];
-                return $this->twig->render('Admin/login.twig',[
-                    'errors' => $errors,
-                    'NewToken'=> $token
-                ]);
+                $mailOk =  $this->mailer->sendCreateAccountEmail($user);
+                if($mailOk !== 1){
+                    $errors = ['Nous rencontrons un problème pour vous envoyer votre lien d\'activation, merci de réessayer dans un petit moment.'];
+                    return $this->twig->render(self::TwigLogin,['success' => $errors] );
+                }else{
+                    $errors = ['Vous avez dépassé le temps imparti pour activer votre compte. Nous vous avons envoyé un nouveau lien sur votre boîte mail. Vous avez de nouveau 15 min pour le valider.'];
+                    return $this->twig->render('Admin/login.twig',[
+                        'errors' => $errors,
+                        'NewToken'=> $token
+                    ]);
+                }
             }
         }
         $errors = ['Nous avons rencontré une erreur, veuillez réessayer de vous connecter ultérieurement','Code ERROR : Jeton Token introuvable en base'];
@@ -168,12 +172,18 @@ class LoginController extends MasterController
                    $user->setDateTokenExpire($newDateExpi);
                    $this->userModel->setNewTokenAndDateExpi($user);
                    //Envoi d'un nouveau email.
-
+                   $mailOk =  $this->mailer->sendNewLinkActivation($user);
+                   if($mailOk !== 1){
+                       $errors = ['Nous rencontrons un problème pour vous envoyer votre lien d\'activation, merci de réessayer dans un petit moment.'];
+                       return $this->twig->render(self::TwigLogin,['success' => $errors] );
+                   }else{
+                       $success = 'Nous venons de vous envoyer un nouveau liens d\'activation, vous avez à présent 15 min pour réinitialiser votre mot de passe';
+                       return $this->twig->render('Admin/login.twig',[
+                           'success' => $success
+                       ]);
+                   }
                    //j'envoie le mail
-                   $success = 'Nous venons de vous envoyer un nouveau liens d\'activation, vous avez à présent 15 min pour réinitialiser votre mot de passe';
-                   return $this->twig->render('Admin/login.twig',[
-                       'success' => $success
-                   ]);
+
                }else{
                    $errors = ['Nous n\'avons pas de compte avec cette adresse mail chez nous, veuillez vous inscrire.'];
                    return $this->twig->render('Admin/createAccount.twig',[
@@ -186,6 +196,38 @@ class LoginController extends MasterController
             'errors' => '',
             'success'=> ''
         ]);
+    }
+
+    public function newPassMethod(){
+        $dataPost = $this->post->getArrayPost();
+        if(!isset($dataPost)){
+            $dataget = $this->get->getArrayGet();
+            //trouve moi un user avec cette id et ce token dont la date d'expiration n'a pas dépassé
+            $userOk = $this->userModel->oneUserByTokenValidAndIdUser($dataget['idUser'],$dataget['token']);
+            if($userOk){
+                return $this->twig->render('Admin/newPassAccount.twig',[
+                    'user' => $userOk
+                ]);
+            }else{
+                $errors = 'Trop lent...Vous avez dépasser le temps imparti, veuillez renouveler votre demande.';
+                return $this->twig->render('Admin/forget.twig',[
+                    'errors' => $errors
+                ]);
+            }
+        }else{
+            $dataget = $this->get->getArrayGet();
+            $cleanData = $this->validator->newUserValid($dataPost);
+            //Est ce que les deux pass sont identiques?
+            $password = $this->session->validPassUser($dataPost['pass1'],$dataPost['pass2']);
+            if($cleanData !== true || is_null($password)){
+                return $this->twig->render('Admin/newPassAccount.twig',['errors' => $cleanData]);
+            }else {
+
+                    $pass = password_hash($dataPost['pass1'], PASSWORD_DEFAULT);
+                    $this->userModel->updatePassWord($dataget['idUser'], $pass );
+                return $this->twig->render(self::TwigLogin,['success' => 'Veuillez vous connecter avec vos nouveaux identifiants']);
+            }
+        }
     }
 
 

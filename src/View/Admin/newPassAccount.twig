@@ -1,0 +1,53 @@
+{% extends 'layout/layoutFront.twig' %}
+{% block header %}
+    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="site-heading">
+                        <h1>Nouveau mot de passe</h1>
+                        <span class="subheading">Welcome to my world !</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="container pb-5">
+            {% if errors %}
+                {% for error in errors %}
+                    <div class="alert alert-danger text-center" role="alert">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+            {% if success%}
+                <div class="alert alert-success text-center" role="alert">{{ success }}</div>
+            {% endif %}
+        </div>
+
+        <form class=" m-auto col-lg-6 text-center" action="index.php?page=login&method=newPassMethod&idUser={{ user.id_user }}&token={{ user.token }}" method="post">
+
+            <div class="input-group" id="show_hide_password">
+                <input class="form-control" type="password" placeholder="Entrez votre nouveau mot de passe" name="pass1" value="{{ user.pass1 }}" required data-validation-required-message="Veuillez entrer votre mot de passe.">
+                <div class="input-group-addon">
+                    <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <p class="help-block text-danger"></p>
+
+            <div class="input-group" id="show_hide_password">
+                <input class="form-control" type="password" placeholder="Saisissez à nouveau votre nouveau mot de passe" name="pass2"  required data-validation-required-message="Veuillez entrer votre mot de passe.">
+                <div class="input-group-addon">
+                    <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <p class="help-block text-danger"></p>
+
+            <button type="submit" class="btn btn-primary">Valider</button>
+        </form>
+    </div>
+{% endblock %}

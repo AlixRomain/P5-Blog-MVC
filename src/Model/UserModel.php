@@ -112,6 +112,36 @@ class UserModel extends MasterModel
     /**
      * @return array
      */
+    public function oneUserByTokenValidAndIdUser($id_user, $token)
+    {
+        /**
+         * @return array
+         * Retourne
+         */
+        return $this->fetch('
+            SELECT * FROM user 
+             WHERE id_user = '.$id_user.'
+             AND token = '.$token.' 
+             AND dateTokenExpire >= NOW()');
+    }
+    /**
+     * @return array
+     */
+    public function updatePassWord($id_user, $pass)
+    {
+        /**
+         * @return array
+         * Retourne
+         */
+        $pass = Connexion::getPDO()->quote($pass);
+        return $this->fetch('
+            UPDATE  user SET
+            password = '.$pass.'
+            WHERE id_user = '.$id_user);
+    }
+    /**
+     * @return array
+     */
     public function fetchOneUserByToken($token)
     {
         /**
