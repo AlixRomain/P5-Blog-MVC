@@ -5,6 +5,7 @@ use App\Controller\Globals\GetController;
 use App\Controller\Globals\MailerController;
 use App\Controller\Globals\PostController;
 use App\Controller\Globals\SessionController;
+use App\Controller\Globals\Validator;
 use App\Model\BlogPostModel;
 use App\Model\CommentModel;
 use App\Model\UserModel;

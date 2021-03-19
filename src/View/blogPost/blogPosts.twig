@@ -6,8 +6,8 @@
             <div class="row">
                 <div class="col-lg-8 col-md-10 mx-auto">
                     <div class="site-heading">
-                        <h1> TOus les BlogPosts</h1>
-                        <span class="subheading"> {% block chapo %}{% endblock %}</span>
+                        <h1> Tous les BlogPosts </h1>
+                        <span class="subheading">Comment peut on vous instruire {{ session.lastName }}? </span>
                     </div>
                 </div>
             </div>
@@ -21,11 +21,14 @@
         <div class="alert alert-success text-center" role="alert">{{ success }}</div>
     {% endif %}
 
-    <p class="text-center">
-        <a href="index.php?page=blogPost&method=createBlogPostMethod" style="color: white" class="btn btn-primary" >
-            Publier un BlogPost
-        </a>
-    </p>
+    {% if session.rank == 'ADMIN' %}
+        <p class="text-center">
+            <a href="index.php?page=blogPost&method=createBlogPostMethod" style="color: white" class="btn btn-primary" >
+                Publier un BlogPost
+            </a>
+        </p>
+    {% endif %}
+
 
     <!-- Main Content -->
     <div class="container">

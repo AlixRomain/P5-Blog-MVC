@@ -13,15 +13,15 @@ class BlogPostController extends MasterController
     /**
      *@var Template
      */
-    const TwigAll = 'blogPosts.twig';
+    const TwigAll = 'blogPost/blogPosts.twig';
     /**
      *@var Template
      */
-    const TwigOne = 'show.twig';
+    const TwigOne = 'blogPost/show.twig';
     /**
      *@var Template
      */
-    const TwigCreate = 'createBlogPost.twig';
+    const TwigCreate = 'blogPost/createBlogPost.twig';
 
     private $adminOk;
     private $userOk;

@@ -6,8 +6,6 @@ namespace App\Controller;
 
 use App\Controller\Globals\MasterController;
 use App\Entity\User;
-use MongoDB\BSON\Timestamp;
-use Twig\Token;
 
 class LoginController extends MasterController
 {
@@ -32,7 +30,8 @@ class LoginController extends MasterController
             $validUser = $this->userModel->fetchOneUserByEmail($email);
             if (password_verify($password, $validUser['password'])){
                 $this->session->createSession($validUser);
-                $this->redirect('blogPost','allBlockPostMethod');
+
+                $this->redirect('home');
             }else{
                 $errors = ['Les identifiants ne sont pas valides.'];
                 return $this->twig->render(self::TwigLogin,[

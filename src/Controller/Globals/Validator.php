@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller;
+namespace App\Controller\Globals;
 
 
 use App\Controller\Globals\FieldValid;

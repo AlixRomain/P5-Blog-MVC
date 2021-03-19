@@ -28,7 +28,7 @@ class MailerController
         $mailer = new Swift_Mailer($transport);
         // Create a message
         $message = (new Swift_Message('Contact du blog de Romain'))
-            ->setFrom([$dataPost['email'] => $dataPost['firstName'].' '.$dataPost['lastName']])
+            ->setFrom([$dataPost['email'] => $dataPost['firstName'].' '.$dataPost['lastName'].' '.$dataPost['email']])
             ->setTo(MAIL_USERNAME)
             ->setBody($dataPost['content']);
         // Send the message

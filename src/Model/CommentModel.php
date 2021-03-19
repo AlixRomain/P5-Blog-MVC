@@ -126,5 +126,23 @@ class CommentModel extends MasterModel
             AND comment.id_blogPost= '.$id_blogPost.'
             ORDER BY comment.dateCreate DESC');
     }
+    /**
+     * @return array
+     */
+    public function fetchAllCommentDisableByIdUser($id_user)
+    {
+        /**
+         * @return array
+         * Retourne
+         */
+        return $this->fetchAll('
+            SELECT * FROM comment
+            INNER JOIN user 
+            ON user.id_user = comment.id_author
+            WHERE comment.publish = 0
+            AND comment.actif = 1
+            AND comment.id_author= '.$id_user.'
+            ORDER BY comment.dateCreate DESC');
+    }
 
 }

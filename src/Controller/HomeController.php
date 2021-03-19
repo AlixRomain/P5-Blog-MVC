@@ -15,15 +15,23 @@ class HomeController extends MasterController
      *@var Template
      */
     const TwigHome = 'home.twig';
+    /**
+     *@var Template
+     */
+    const TwigAbout = 'about.twig';
 
     public function defaultMethod()
     {
-        return $this->twig->render(self::TwigHome);
+        $number = 0;
+        if($this->session->validAdmin()){
+           $number = count($this->commentModel->fetchAllCommentDisableByIdUser($_SESSION['user']['id_user']));
+        }
+        return $this->twig->render(self::TwigHome,['number' => $number]);
     }
 
     public function AboutMethod()
     {
-        return $this->twig->render(self::TwigHome);
+        return $this->twig->render(self::TwigAbout);
     }
     public function contactMethod()
     {
@@ -37,6 +45,7 @@ class HomeController extends MasterController
                     'errors'=> $cleanData
                 ]);
             }else{
+
                $mailOk =  $this->mailer->sendContactEmail($dataPost);
                if($mailOk !== 1){
                    $errors = ['Échec de l\'envoie de votre message, merci de réessayer dans un petit moment.'];

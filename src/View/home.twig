@@ -30,6 +30,20 @@
         {% endif %}
     </div>
 
+    {% if number > 0 %}
+        <div class="container pb-5">
+            <p class="text-center" style="background-color: orange">
+                <a class="nav-link" href="index.php?page=comment&method=allCommentDisableMethod">{{ session.lastName }} vous avez {{ number }}  nouveaux commentaires à valider !</a>
+            </p>
+        </div>
+    {% endif %}
+
+    {% if session.rank == 'UTILISATEUR' %}
+        <p class="text-center">
+            <a class="nav-link" href="index.php?page=blogPost&method=allBlockPostMethod">Bonjour {{ session.lastName }}, j'ai des nouveaux blogPosts pour vous !</a>
+        </p>
+    {% endif %}
+
     <p class="text-center">
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
             Me Contacter
