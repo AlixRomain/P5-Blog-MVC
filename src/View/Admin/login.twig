@@ -1,0 +1,49 @@
+{% extends 'layout/layoutFront.twig' %}
+{% block header %}
+    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="site-heading">
+                        <h1>Connexion</h1>
+                        <span class="subheading">Welcome to my world !</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="container pb-5">
+            {% if errors %}
+                {% for error in errors %}
+                    <div class="alert alert-danger text-center" role="alert">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+            {% if success%}
+                <div class="alert alert-success text-center" role="alert">{{ success }}</div>
+            {% endif %}
+        </div>
+
+            <form class=" m-auto col-lg-6 text-center" action="index.php?page=login&method=loginMethod" method="post">
+
+                <div class="form-group">
+                    <input type="email" class="form-control"  placeholder="@email" value="{{ user.email }}"  id="email" name="email" required data-validation-required-message="veuillez entrer votre adresse email">
+                    <p class="help-block text-danger"></p>
+                </div>
+
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Mot de passe" value="{{ blogPost.chapo }}" id="pass" name="pass" required data-validation-required-message="Veuillez entrer votre mot de passe.">
+                    <p class="help-block text-danger"></p>
+                </div>
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+        <p class=" m-auto text-center ">
+            <a  href="index.php?page=login&method=passForgetMethod" style="font-size: 16px; opacity: 0.7" >Mot de passe oublié ?</a>
+        </p>
+    </div>
+{% endblock %}

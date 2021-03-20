@@ -24,7 +24,8 @@ class GetController
             'page' => FILTER_SANITIZE_SPECIAL_CHARS,//Echappe les caractères spéciaux
             'idBlogPost' => FILTER_SANITIZE_NUMBER_INT,//Ne garde que chiffre, +, -
             'idComment' => FILTER_SANITIZE_NUMBER_INT,//Ne garde que chiffre, +, -
-            'idUser' => FILTER_SANITIZE_NUMBER_INT
+            'idUser' => FILTER_SANITIZE_NUMBER_INT,
+            'token' => FILTER_SANITIZE_NUMBER_INT
         );
 
         $this->get = filter_input_array(INPUT_GET, $def);//Ne garde dans l'INPUT_GET que les datas filtrés par $def

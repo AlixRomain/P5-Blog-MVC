@@ -27,6 +27,8 @@ abstract class MasterController extends ImportController
         ));
         //permet de Dumper depuis le front
         $this->twig->addExtension(new DebugExtension());
+        //création super global session à partir de l'objet user récupérer
+        $this->twig->addGlobal('session', $this->session->getUserSession());
     }
 
     /**

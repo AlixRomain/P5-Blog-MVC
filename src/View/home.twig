@@ -17,14 +17,40 @@
         </div>
     </header>
 {% endblock %}
+
 {% block content %}
+    <div class="container pb-5">
+        {% if errors %}
+            {% for error in errors %}
+                <div class="alert alert-danger text-center" role="alert">{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+        {% if success%}
+            <div class="alert alert-success text-center" role="alert">{{ success }}</div>
+        {% endif %}
+    </div>
+
+    {% if number > 0 %}
+        <div class="container pb-5">
+            <p class="text-center" style="background-color: orange">
+                <a class="nav-link" href="index.php?page=comment&method=allCommentDisableMethod">{{ session.lastName }} vous avez {{ number }}  nouveaux commentaires à valider !</a>
+            </p>
+        </div>
+    {% endif %}
+
+    {% if session.rank == 'UTILISATEUR' %}
+        <p class="text-center">
+            <a class="nav-link" href="index.php?page=blogPost&method=allBlockPostMethod">Bonjour {{ session.lastName }}, j'ai des nouveaux blogPosts pour vous !</a>
+        </p>
+    {% endif %}
+
     <p class="text-center">
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
             Me Contacter
         </button>
     </p>
     <div class="collapse container" id="collapseExample">
-        <form class="col" action="index.php?page=home&method=contact" method="post">
+        <form class="col" action="index.php?page=home&method=contactMethod" method="post">
             <div class="row mb-3">
                 <div class="col controls">
                     <input type="text" name="firstName" class="form-control" placeholder="Votre Nom" id="firstName" required data-validation-required-message="Veuillez entrer votre nom.">
@@ -36,7 +62,11 @@
                 </div>
             </div>
             <div class="form-group">
-                <textarea class="form-control" id="comment" name="comment" placeholder="Taper votre commentaire..." rows="3" required data-validation-required-message="Veuillez entrer votre commentaire."></textarea>
+                <input type="email" class="form-control"  placeholder="@email"   id="email" name="email" required data-validation-required-message="veuillez entrer votre adresse email">
+                <p class="help-block text-danger"></p>
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" id="content" name="content" placeholder="Taper votre contentaire..." rows="3" required data-validation-required-message="Veuillez entrer votre contentaire."></textarea>
                 <p class="help-block text-danger"></p>
             </div>
             <p class="text-right">

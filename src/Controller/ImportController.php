@@ -2,9 +2,13 @@
 namespace App\Controller;
 
 use App\Controller\Globals\GetController;
+use App\Controller\Globals\MailerController;
 use App\Controller\Globals\PostController;
+use App\Controller\Globals\SessionController;
+use App\Controller\Globals\Validator;
 use App\Model\BlogPostModel;
 use App\Model\CommentModel;
+use App\Model\UserModel;
 
 /**
  * Class ImportController
@@ -21,6 +25,10 @@ class ImportController
      */
     protected $get;
     /**
+     * @var SessionController
+     */
+    protected $session;
+    /**
      * @var CommentModel;
 
      */
@@ -31,10 +39,17 @@ class ImportController
      */
     protected $blogModel;
     /**
-     * @var ValidatorController;
-
+     * @var Validator;
      */
     protected $validator;
+    /**
+     * @var UserModel;
+     */
+    protected $userModel;
+    /**
+     * @var MailerController;
+     */
+    protected $mailer;
 
     /**
      * ImportController constructor.
@@ -46,5 +61,8 @@ class ImportController
         $this->blogModel = new BlogPostModel();
         $this->commentModel = new CommentModel();
         $this->validator = new Validator();
+        $this->userModel = new UserModel;
+        $this->session = new SessionController();
+        $this->mailer = new MailerController();
     }
 }

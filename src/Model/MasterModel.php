@@ -19,7 +19,7 @@ class MasterModel
         } catch (\PDOException $e){
             //rerouter? +afficher l'erreur
         }
-
+        //$2y$10$xz5UVhVsgY.Xl.gbKMlX0O8Iqcl/3iMiH4wk7bJIaniDLtUsU6bRK
     }
 
     //Voir pour refactoriser avec dans le fetch. la requte qui finit par AND Article.idArticle = :id)
@@ -30,6 +30,7 @@ class MasterModel
      */
     public function fetchAll($req)
     {
+
         $req = Connexion::getPDO()->prepare($req);
         $req->execute();
         return $req->fetchAll();
@@ -42,6 +43,7 @@ class MasterModel
      */
     public function execArray($req, $array = [])
     {
+
         $req = Connexion::getPDO()->prepare($req);
         return $req->execute($array);
     }
