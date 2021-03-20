@@ -17,15 +17,16 @@ class CommentModel extends MasterModel
          * @return array
          * Retourne
          */
+        $array = [[':id', $id_blogpost, PDO::PARAM_INT]];
         return $this->fetchAll('
             SELECT * FROM comment
             INNER JOIN user 
             ON user.id_user = comment.id_author
             WHERE comment.publish = 1
             AND comment.actif = 1
-            AND comment.id_blogpost ='.$id_blogpost.'
+            AND comment.id_blogpost = :id
             ORDER BY comment.dateCreate DESC
-            ');
+            ', $array);
 
     }
     /**
@@ -37,13 +38,15 @@ class CommentModel extends MasterModel
          * @return array
          * Retourne
          */
-        $content = Connexion::getPDO()->quote($content);
-        return $this->fetch('
+
+
+        $array = [[':id', $id_BlogPost,PDO::PARAM_INT], [':content', $content, PDO::PARAM_STR] ];
+        return $this->fetchOne('
             SELECT * FROM comment
             INNER JOIN blogpost
             ON blogpost.id_blogpost = comment.id_blogpost
-            WHERE blogpost.id_blogpost = '.$id_BlogPost.'
-             AND comment.content ='.$content);
+            WHERE blogpost.id_blogpost = :id
+             AND comment.content = :content', $array);
     }
     /**
      * @return array
@@ -54,12 +57,13 @@ class CommentModel extends MasterModel
          * @return array
          * Retourne
          */
-        return $this->fetch('
+        $array = [[':id', $id_BlogPost,PDO::PARAM_INT], [':id2', $id_comment, PDO::PARAM_INT] ];
+        return $this->fetchOne('
             SELECT * FROM comment
             INNER JOIN blogpost
             ON blogpost.id_blogpost = comment.id_blogpost
-            WHERE blogpost.id_blogpost = '.$id_BlogPost.'
-             AND comment.id_comment ='.$id_comment);
+            WHERE blogpost.id_blogpost = :id
+             AND comment.id_comment = :id2',  $array);
     }
 
     /**
@@ -71,12 +75,11 @@ class CommentModel extends MasterModel
          * @return array
          * Retourne
          */
-        $drap = ':id';
-        $pdo = PDO::PARAM_INT;
-        return $this->fetchByBind('
+        $array = [[':id', $id_comment, PDO::PARAM_INT]];
+        return $this->fetchOne('
             UPDATE comment SET
             actif = 0
-            WHERE comment.id_comment = :id',$drap ,$id_comment , $pdo);
+            WHERE comment.id_comment = :id',$array);
     }
 
     /**
@@ -88,12 +91,11 @@ class CommentModel extends MasterModel
          * @return array
          * Retourne
          */
-        $drap = ':id';
-        $pdo = PDO::PARAM_INT;
-        return $this->fetchByBind('
+        $array = [[':id', $id_comment, PDO::PARAM_INT]];
+        return $this->fetchOne('
             UPDATE comment SET
             publish = 1
-            WHERE comment.id_comment = :id', $drap, $id_comment, $pdo);
+            WHERE comment.id_comment = :id', $array);
     }
 
     /**
@@ -123,14 +125,15 @@ class CommentModel extends MasterModel
          * @return array
          * Retourne
          */
+        $array = [[':id', $id_blogPost, PDO::PARAM_INT]];
         return $this->fetchAll('
             SELECT * FROM comment
             INNER JOIN user 
             ON user.id_user = comment.id_author
             WHERE comment.publish = 0
             AND comment.actif = 1
-            AND comment.id_blogPost= '.$id_blogPost.'
-            ORDER BY comment.dateCreate DESC');
+            AND comment.id_blogPost= :id
+            ORDER BY comment.dateCreate DESC', $array);
     }
     /**
      * @return array
@@ -141,14 +144,15 @@ class CommentModel extends MasterModel
          * @return array
          * Retourne
          */
+        $array = [[':id', $id_user, PDO::PARAM_INT]];
         return $this->fetchAll('
             SELECT * FROM comment
             INNER JOIN user 
             ON user.id_user = comment.id_author
             WHERE comment.publish = 0
             AND comment.actif = 1
-            AND comment.id_author= '.$id_user.'
-            ORDER BY comment.dateCreate DESC');
+            AND comment.id_author= :id
+            ORDER BY comment.dateCreate DESC', $array);
     }
 
 }

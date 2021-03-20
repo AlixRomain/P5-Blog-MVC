@@ -59,6 +59,7 @@ class CommentController extends MasterController
             $this->redirect('home','defaultMethod');
         }
         $comment = $this->commentModel->fetchOneCommentById($id_blogpost, $id_comment);
+
         if($comment != false){
             $comment =  $this->commentModel->publishComment($id_comment);
             ($comment !== false)? $error ='Publication réussi':$error = 'Echec de la publication du commentaire';

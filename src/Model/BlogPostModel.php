@@ -11,7 +11,7 @@ class BlogPostModel extends MasterModel
     /**
      * @return array
      */
-    public function fetchAllBlogpost()
+    public function fetchAllBlogpost($array = null)
     {
         /**
          * @return array
@@ -25,12 +25,12 @@ class BlogPostModel extends MasterModel
             AND blogPost.actif = 1
             ORDER BY CASE WHEN blogpost.dateUpdate > blogpost.dateCreate
             THEN blogpost.dateUpdate ELSE blogpost.dateCreate END DESC
-            ');
+            ', $array);
     }
     /**
      * @return array
      */
-    public function fetchAllBlogPostWithCommentDisable()
+    public function fetchAllBlogPostWithCommentDisable($array = null)
     {
         /**
          * @return array
@@ -45,7 +45,7 @@ class BlogPostModel extends MasterModel
             GROUP BY blogpost.id_blogPost
             ORDER BY CASE WHEN blogpost.dateUpdate > blogpost.dateCreate
             THEN blogpost.dateUpdate ELSE blogpost.dateCreate END DESC
-            ');
+            ', $array);
     }
     /**
      * @return array
@@ -56,12 +56,12 @@ class BlogPostModel extends MasterModel
          * @return array
          * Retourne
          */
-        $drap = ':id';
-        $pdo = PDO::PARAM_INT;
-        return $this->fetchByBind('
+
+        $array = [[':id', $id_blogPost,PDO::PARAM_INT] ];
+        return $this->fetchOne('
             UPDATE blogpost SET
             actif = 0
-            WHERE blogpost.id_blogPost = :id',$drap, $id_blogPost,  $pdo);
+            WHERE blogpost.id_blogPost = :id',$array);
     }
 
     /**
@@ -73,11 +73,11 @@ class BlogPostModel extends MasterModel
          * @return array
          * Retourne
          */
-        $drap = ':title';
-        $pdo = PDO::PARAM_STR;
-        return $this->fetchByBind('
+
+        $array = [[':title', $title,PDO::PARAM_STR] ];
+        return $this->fetchOne('
             SELECT title FROM blogpost
-            WHERE blogpost.title = :title',$drap,$title,$pdo);
+            WHERE blogpost.title = :title',$array);
     }
 
     /**
@@ -89,15 +89,15 @@ class BlogPostModel extends MasterModel
          * @return array
          * Retourne
          */
-        $drap = ':id';
-        $pdo = PDO::PARAM_INT;
-        return $this->fetchByBind('
+
+        $array = [[':id', $id_blogpost, PDO::PARAM_INT] ];
+        return $this->fetchOne('
             SELECT * FROM blogPost
             INNER JOIN user 
             ON user.id_user = blogpost.id_author
             WHERE blogPost.publish = 1
             AND blogPost.actif = 1
-            AND id_blogPost = :id',$drap, $id_blogpost,$pdo );
+            AND id_blogPost = :id',$array );
     }
     /**
      * @return array

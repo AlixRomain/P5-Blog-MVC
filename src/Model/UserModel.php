@@ -4,6 +4,8 @@
 namespace App\Model;
 
 
+use PDO;
+
 class UserModel extends MasterModel
 {
     /**
@@ -11,32 +13,31 @@ class UserModel extends MasterModel
      */
     public function fetchOneUserByEmail($email)
     {
-        $email = Connexion::getPDO()->quote($email);
+
         /**
          * @return array
          * Retourne
          */
-        return $this->fetch('
+        $array = [[':email', $email, PDO::PARAM_STR] ];
+        return $this->fetchOne('
             SELECT * FROM user
             WHERE actif = 1
-            AND email = '.$email);
+            AND email = :email', $array);
     }
     /**
     * @return array
     */
     public function fetchOneUserByEmailOrPseudo($email, $pseudo)
     {
-        $email = Connexion::getPDO()->quote($email);
-        $pseudo = Connexion::getPDO()->quote($pseudo);
         /**
          * @return array
          * Retourne
          */
-
-        return $this->fetch('
+        $array = [[':email', $email, PDO::PARAM_STR], [':pseudo', $pseudo, PDO::PARAM_STR] ];
+        return $this->fetchOne('
             SELECT * FROM user
-            WHERE user.email = '.$email.'
-            OR pseudo = '.$pseudo);
+            WHERE user.email = :email
+            OR pseudo = :pseudo', $array);
     }
 
     /**
@@ -72,12 +73,12 @@ class UserModel extends MasterModel
          * @return array
          * Retourne
          */
-        $date = Connexion::getPDO()->quote($user->getDateTokenExpire());
-        return $this->fetch('
+        $array = [[':id', $user->getIdUser(), PDO::PARAM_INT], [':token', $user->getToken(), PDO::PARAM_INT], [':date', $user->getDateTokenExpire(), PDO::PARAM_STR] ];
+        return $this->fetchOne('
             UPDATE  user SET
-            token = '.$user->getToken().',
-            dateTokenExpire = '.$date.'
-            WHERE user.id_user = '.$user->getIdUser());
+            token = :token,
+            dateTokenExpire = :date
+            WHERE user.id_user = :id', $array);
     }
     /**
      * @return array
@@ -89,10 +90,11 @@ class UserModel extends MasterModel
          * @return array
          * Retourne
          */
-        return $this->fetch('
+        $array = [[':token', $token, PDO::PARAM_INT]];
+        return $this->fetchOne('
             UPDATE  user SET
             actif = 1
-            WHERE user.token = '.$token);
+            WHERE user.token = :token', $array);
     }
 
     /**
@@ -104,10 +106,11 @@ class UserModel extends MasterModel
          * @return array
          * Retourne
          */
-        return $this->fetch('
+        $array = [[':token', $token, PDO::PARAM_INT]];
+        return $this->fetchOne('
             SELECT * FROM user 
-             WHERE token = '.$token.' 
-            AND dateTokenExpire >= NOW()');
+             WHERE token = :token 
+            AND dateTokenExpire >= NOW()',$array);
     }
     /**
      * @return array
@@ -118,11 +121,12 @@ class UserModel extends MasterModel
          * @return array
          * Retourne
          */
-        return $this->fetch('
+        $array = [[':id', $id_user, PDO::PARAM_INT], [':token', $token, PDO::PARAM_INT]];
+        return $this->fetchOne('
             SELECT * FROM user 
-             WHERE id_user = '.$id_user.'
-             AND token = '.$token.' 
-             AND dateTokenExpire >= NOW()');
+             WHERE id_user = :id
+             AND token = :token 
+             AND dateTokenExpire >= NOW()', $array);
     }
     /**
      * @return array
@@ -133,11 +137,11 @@ class UserModel extends MasterModel
          * @return array
          * Retourne
          */
-        $pass = Connexion::getPDO()->quote($pass);
-        return $this->fetch('
+        $array = [[':id', $id_user, PDO::PARAM_INT], [':pass', $pass, PDO::PARAM_STR]];
+        return $this->fetchOne('
             UPDATE  user SET
-            password = '.$pass.'
-            WHERE id_user = '.$id_user);
+            password = :pass
+            WHERE id_user = :id', $array);
     }
     /**
      * @return array
@@ -148,9 +152,10 @@ class UserModel extends MasterModel
          * @return array
          * Retourne
          */
-        return $this->fetch('
+        $array = [[':token', $token, PDO::PARAM_INT]];
+        return $this->fetchOne('
             SELECT * FROM user 
-             WHERE token = '.$token);
+             WHERE token = :token', $array);
     }
     /**
      * @return array
@@ -161,8 +166,9 @@ class UserModel extends MasterModel
          * @return array
          * Retourne
          */
-        return $this->fetch('
+        $array = [[':token', $token, PDO::PARAM_INT]];
+        return $this->fetchOne('
             SELECT * FROM user 
-             WHERE token = '.$token);
+             WHERE token = :token', $array);
     }
 }
