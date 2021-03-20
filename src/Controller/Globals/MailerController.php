@@ -12,7 +12,8 @@ class MailerController
 {
     public function __construct()
     {
-        require_once('../config/dataMail.php');
+        //require_once('../config/dataMail.php');
+        require_once('../config/dataMail2.php');
     }
     /**
      * @param array $user

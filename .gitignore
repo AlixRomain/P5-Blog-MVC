@@ -108,3 +108,5 @@ fabric.properties
 .idea/
 
 vendor/
+
+config/dataMail2.php
