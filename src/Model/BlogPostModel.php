@@ -4,6 +4,8 @@
 namespace App\Model;
 
 
+use PDO;
+
 class BlogPostModel extends MasterModel
 {
     /**
@@ -54,10 +56,12 @@ class BlogPostModel extends MasterModel
          * @return array
          * Retourne
          */
-        return $this->fetch('
+        $drap = ':id';
+        $pdo = PDO::PARAM_INT;
+        return $this->fetchByBind('
             UPDATE blogpost SET
             actif = 0
-            WHERE blogpost.id_blogPost ='.$id_blogPost);
+            WHERE blogpost.id_blogPost = :id',$drap, $id_blogPost,  $pdo);
     }
 
     /**
@@ -69,10 +73,11 @@ class BlogPostModel extends MasterModel
          * @return array
          * Retourne
          */
-        $title = Connexion::getPDO()->quote($title);
-        return $this->fetch('
+        $drap = ':title';
+        $pdo = PDO::PARAM_STR;
+        return $this->fetchByBind('
             SELECT title FROM blogpost
-            WHERE blogpost.title ='.$title);
+            WHERE blogpost.title = :title',$drap,$title,$pdo);
     }
 
     /**
@@ -84,13 +89,15 @@ class BlogPostModel extends MasterModel
          * @return array
          * Retourne
          */
-        return $this->fetch('
+        $drap = ':id';
+        $pdo = PDO::PARAM_INT;
+        return $this->fetchByBind('
             SELECT * FROM blogPost
             INNER JOIN user 
             ON user.id_user = blogpost.id_author
             WHERE blogPost.publish = 1
             AND blogPost.actif = 1
-            AND id_blogPost = '. $id_blogpost );
+            AND id_blogPost = :id',$drap, $id_blogpost,$pdo );
     }
     /**
      * @return array

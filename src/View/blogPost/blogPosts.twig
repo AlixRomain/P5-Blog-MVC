@@ -38,10 +38,10 @@
                     <div class="post-preview">
                         <a href="index.php?page=blogPost&method=showBlockPostMethod&idBlogPost={{ blogPost.id_blogPost }}">
                             <h2 class="post-title">
-                                {{ blogPost.title }}
+                                {{ blogPost.title|raw }}
                             </h2>
                             <h3 class="post-subtitle">
-                                {{ blogPost.chapo }}
+                                {{ blogPost.chapo|raw  }}
                             </h3>
                         </a>
                         <p class="post-meta">Rédigé par

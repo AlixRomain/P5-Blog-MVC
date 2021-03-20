@@ -21,7 +21,7 @@ class CommentController extends MasterController
     /**
      *@var Template
      */
-    const TwigAllComment = 'comments.twig';
+    const TwigAllComment = 'blogPost/comments.twig';
 
     /**
      * @param null $msg

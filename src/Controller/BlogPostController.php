@@ -92,7 +92,9 @@ class BlogPostController extends MasterController
      */
     public function createBlogPostMethod()
     {
+
         $dataPost = $this->post->getArrayPost();
+        var_dump($dataPost);
         if(!isset($dataPost) || empty($dataPost) || is_null($this->adminOk)){
             return $this->twig->render(self::TwigCreate);
         }else{

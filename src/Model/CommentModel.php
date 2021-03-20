@@ -4,6 +4,8 @@
 namespace App\Model;
 
 
+use PDO;
+
 class CommentModel extends MasterModel
 {
     /**
@@ -69,10 +71,12 @@ class CommentModel extends MasterModel
          * @return array
          * Retourne
          */
-        return $this->fetch('
+        $drap = ':id';
+        $pdo = PDO::PARAM_INT;
+        return $this->fetchByBind('
             UPDATE comment SET
             actif = 0
-            WHERE comment.id_comment ='.$id_comment);
+            WHERE comment.id_comment = :id',$drap ,$id_comment , $pdo);
     }
 
     /**
@@ -84,10 +88,12 @@ class CommentModel extends MasterModel
          * @return array
          * Retourne
          */
-        return $this->fetch('
+        $drap = ':id';
+        $pdo = PDO::PARAM_INT;
+        return $this->fetchByBind('
             UPDATE comment SET
             publish = 1
-            WHERE comment.id_comment ='.$id_comment);
+            WHERE comment.id_comment = :id', $drap, $id_comment, $pdo);
     }
 
     /**
