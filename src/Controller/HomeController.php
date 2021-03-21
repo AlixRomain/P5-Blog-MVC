@@ -29,7 +29,7 @@ class HomeController extends MasterController
         return $this->twig->render(self::TWIG_HOME,['number' => $number]);
     }
 
-    public function AboutMethod()
+    public function aboutMethod()
     {
         return $this->twig->render(self::TWIG_ABOUT);
     }

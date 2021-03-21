@@ -16,7 +16,7 @@ class MailerController
         require_once('../config/dataMail2.php');
     }
     /**
-     * @param array $user
+     * @param array $dataPost
      * @return int
      */
     public function sendContactEmail(array $dataPost)
@@ -37,7 +37,7 @@ class MailerController
         return $result;
     }
     /**
-     * @param  $user
+     * @param $user object
      * @return int
      */
     public function sendCreateAccountEmail($user)
@@ -74,7 +74,7 @@ class MailerController
         return $result;
     }
     /**
-     * @param  $user
+     * @param  $user object
      * @return int
      */
     public function sendNewLinkActivation($user)

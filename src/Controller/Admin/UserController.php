@@ -16,5 +16,4 @@ class UserController extends MasterController
         $valid = $this->userModel->isExistToken($token);
         return($valid !== false)? true: false;
     }
-
 }

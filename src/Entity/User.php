@@ -23,6 +23,10 @@ class User
     private $rank;
     private $actif;
 
+    public  function __construct(Array $datas){
+        $this->hydrate($datas);
+    }
+
     /**
      * @return mixed
      */
@@ -101,10 +105,6 @@ class User
     public function setDateTokenExpire($dateTokenExpire): void
     {
         $this->dateTokenExpire = $dateTokenExpire;
-    }
-
-    function __construct(Array $datas){
-        $this->hydrate($datas);
     }
 
     /**
@@ -234,5 +234,4 @@ class User
     {
         $this->actif = $actif;
     }
-
 }

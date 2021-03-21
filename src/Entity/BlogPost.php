@@ -19,7 +19,7 @@ class BlogPost
     private $actif;
     private $id_author;
 
-    function __construct(Array $datas){
+    public function __construct(Array $datas){
         $this->hydrate($datas);
     }
     /**
@@ -166,7 +166,5 @@ class BlogPost
     {
         $this->id_author = $id_author;
     }
-
-
-
 }
+

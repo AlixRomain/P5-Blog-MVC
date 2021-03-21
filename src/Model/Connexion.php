@@ -40,5 +40,4 @@ class Connexion
     //$onePost = $query->fetch(); pour un resultat
     //onecolonne = $query->fetchColumn(num); pour toute une colonne
     //$id = $pdo->quote($_GET['id']); Pour sécuriser un id récupérer en Url
-
 }

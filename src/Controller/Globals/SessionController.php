@@ -13,7 +13,6 @@ class SessionController
     private $user;
 
     public function __construct(){
-        //$this->session = filter_var_array($_SESSION);
 
         if(isset($_SESSION['user'])){
             $this->session = $_SESSION['user'];
@@ -76,8 +75,5 @@ class SessionController
     {
         return($pass1 !== $pass2)? null: true;
     }
-
-
-
-
 }
+

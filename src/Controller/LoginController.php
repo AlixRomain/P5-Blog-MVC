@@ -228,12 +228,9 @@ class LoginController extends MasterController
             }
         }
     }
-
-
     public function logoutMethod()
     {
         $this->session->logoutSession();
         $this->redirect('home','defaultMethod');
     }
-
 }

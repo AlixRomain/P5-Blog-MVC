@@ -235,6 +235,4 @@ class BlogPostController extends MasterController
             $this->redirect('home','defaultMethod');
         }
     }
-
-
 }

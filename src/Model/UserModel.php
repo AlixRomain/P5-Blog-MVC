@@ -186,3 +186,4 @@ class UserModel extends MasterModel
              WHERE token = :token', $array);
     }
 }
+

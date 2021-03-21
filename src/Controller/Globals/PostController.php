@@ -48,6 +48,4 @@ class PostController
     {
         return htmlspecialchars(strip_tags(trim($var)));
     }
-
-
 }

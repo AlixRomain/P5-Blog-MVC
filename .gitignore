@@ -105,8 +105,6 @@ fabric.properties
 .idea/codestream.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/phpstorm
-.idea/
-
 vendor/
 
 config/dataMail2.php
