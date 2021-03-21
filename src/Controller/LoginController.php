@@ -106,7 +106,6 @@ class LoginController extends MasterController
     }
 
     public function registerMethod(){
-        //index.php?page=login&method=registerMethod&token='16158822074289917'
         $token = $this->get->getDataGet('token');
         $user = $this->userModel->fetchOneUserByToken($token);
         if($user !== false){
@@ -118,8 +117,6 @@ class LoginController extends MasterController
                     'success' => $success
                 ]);
             }else{
-                //Remodifié le token
-
                 $user= new User($user);
                 $newToken 	= time().rand(1000000,9000000);
                 $date = new \DateTime();

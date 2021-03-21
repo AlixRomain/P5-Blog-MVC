@@ -40,7 +40,7 @@ class MailerController
      * @param $user object
      * @return int
      */
-    public function sendCreateAccountEmail($user)
+    public function sendCreateAccountEmail(object $user)
     {
         // Create the Transport
         $transport = (new Swift_SmtpTransport(MAIL_SMTP, MAIL_PORT, 'ssl'))
@@ -77,7 +77,7 @@ class MailerController
      * @param  $user object
      * @return int
      */
-    public function sendNewLinkActivation($user)
+    public function sendNewLinkActivation(object $user)
     {
         // Create the Transport
         $transport = (new Swift_SmtpTransport(MAIL_SMTP, MAIL_PORT, 'ssl'))

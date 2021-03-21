@@ -46,5 +46,4 @@ class Router
 
         echo filter_var($reponse);
     }
-
 }
