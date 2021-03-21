@@ -13,15 +13,15 @@ class BlogPostController extends MasterController
     /**
      *@var Template
      */
-    const TwigAll = 'blogPost/blogPosts.twig';
+    const TWIG_ALL = 'blogPost/blogPosts.twig';
     /**
      *@var Template
      */
-    const TwigOne = 'blogPost/show.twig';
+    const TWIG_ONE = 'blogPost/show.twig';
     /**
      *@var Template
      */
-    const TwigCreate = 'blogPost/createBlogPost.twig';
+    const TWIG_CREATE = 'blogPost/createBlogPost.twig';
 
     private $adminOk;
     private $userOk;
@@ -44,7 +44,7 @@ class BlogPostController extends MasterController
     {
         $blogposts = $this->blogModel->fetchAllBlogpost();
 
-        return $this->twig->render(self::TwigAll,
+        return $this->twig->render(self::TWIG_ALL,
             ['blogPosts'=> $blogposts,
                 'success'=> $msg
                 ]);
@@ -62,7 +62,7 @@ class BlogPostController extends MasterController
         $blogpost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
         if($blogpost !== false){
             $comments =  $this->commentModel->fetchAllCommentByBlogpost($id_blogpost);
-            return $this->twig->render(self::TwigOne,
+            return $this->twig->render(self::TWIG_ONE,
                 ['blogPost'=> $blogpost, 'comments'=> $comments, 'errors'=> $msg ]);
         }else{
             $this->redirect('home','defaultMethod');
@@ -78,7 +78,7 @@ class BlogPostController extends MasterController
             $this->redirect('home','defaultMethod');
         }else{
             $blogPost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
-            if($blogPost != false){
+            if($blogPost !== false){
                 $blogPost =  $this->blogModel->disableBlogPost($id_blogpost);
                 ($blogPost !== false)? $error ='BlogPost supprimé avec succès':$error = 'Echec de la suppression du blogPost';
                 return $this->allBlockPostMethod($error);
@@ -94,22 +94,21 @@ class BlogPostController extends MasterController
     {
 
         $dataPost = $this->post->getArrayPost();
-        var_dump($dataPost);
         if(!isset($dataPost) || empty($dataPost) || is_null($this->adminOk)){
-            return $this->twig->render(self::TwigCreate);
+            return $this->twig->render(self::TWIG_CREATE);
         }else{
 
             //Si je rafraichit la page et que j'ai déjà ce post e nbase je reroute
             $exist = $this->blogModel->fetchOneBlogPostByTitle( $this->post->getDataClean($dataPost['title']));
             if ($exist !== false){
                 $error= ['Il semblerait qu\'un BlogPost avec ce titre existe déjà en base.'];
-                return $this->twig->render(self::TwigCreate,[
+                return $this->twig->render(self::TWIG_CREATE,[
                     'errors'=> $error
                 ]);
             }else{
                 $cleanData = $this->validator->blogPostValid($dataPost);
                 if($cleanData !== true){
-                    return $this->twig->render(self::TwigCreate,[
+                    return $this->twig->render(self::TWIG_CREATE,[
                         'errors'=> $cleanData
                     ]);
                 }else{
@@ -145,7 +144,7 @@ class BlogPostController extends MasterController
             $id_blogpost = $this->get->getDataGet('idBlogPost');
             $validBlogPost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
             if ($validBlogPost !== false){
-                return $this->twig->render(self::TwigCreate,[
+                return $this->twig->render(self::TWIG_CREATE,[
                     'blogPost'=> $validBlogPost,
                 ]);
             }
@@ -154,7 +153,7 @@ class BlogPostController extends MasterController
             $id_blogpost = $this->get->getDataGet('idBlogPost');
             $validBlogPost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
             if($cleanData !== true){
-                return $this->twig->render(self::TwigCreate,[
+                return $this->twig->render(self::TWIG_CREATE,[
                     'errors'=> $cleanData,
                     'blogPost'=> $validBlogPost
                 ]);
@@ -183,7 +182,7 @@ class BlogPostController extends MasterController
         $id_blogpost = $this->get->getDataGet('idBlogPost');
         $validBlogPost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
 
-        if(!isset($dataPost) || empty($dataPost) || $validBlogPost == false ){
+        if(!isset($dataPost) || empty($dataPost) || $validBlogPost === false ){
             $errors = 'Echec, votre commentaire n\'a pas été pris en compte par nos service.';
             return $this->allBlockPostMethod($errors);
         }else{
@@ -222,14 +221,13 @@ class BlogPostController extends MasterController
      */
     public function deleteCommentMethod()
     {
-
         $id_comment = $this->get->getDataGet('idComment') ;
         $id_blogpost = $this->get->getDataGet('idBlogPost') ;
         if(!is_numeric($id_comment) || !is_numeric($id_blogpost) || is_null($this->adminOk)){
             $this->redirect('home','defaultMethod');
         }
         $comment = $this->commentModel->fetchOneCommentById($id_blogpost, $id_comment);
-        if($comment != false){
+        if($comment !== false){
             $comment =  $this->commentModel->disableComment($id_comment);
             ($comment !== false)? $error =['Commentaire supprimé avec succès']:$error = ['Echec de la suppression du commentaire'];
             return $this->showBlockPostMethod($error, $id_blogpost);

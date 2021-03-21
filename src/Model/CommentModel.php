@@ -9,13 +9,14 @@ use PDO;
 class CommentModel extends MasterModel
 {
     /**
+     * @param $id_blogpost
      * @return array
+     * Return all comments from one blogPost
      */
     public function fetchAllCommentByBlogpost($id_blogpost)
     {
         /**
          * @return array
-         * Retourne
          */
         $array = [[':id', $id_blogpost, PDO::PARAM_INT]];
         return $this->fetchAll('
@@ -30,16 +31,16 @@ class CommentModel extends MasterModel
 
     }
     /**
-     * @return array
+     * @param $content
+     * @param $id_BlogPost
+     * @return object
+     * Returns one comment that matches a content
      */
     public function fetchOneCommentPostByContent($id_BlogPost, $content)
     {
         /**
          * @return array
-         * Retourne
          */
-
-
         $array = [[':id', $id_BlogPost,PDO::PARAM_INT], [':content', $content, PDO::PARAM_STR] ];
         return $this->fetchOne('
             SELECT * FROM comment
@@ -49,13 +50,15 @@ class CommentModel extends MasterModel
              AND comment.content = :content', $array);
     }
     /**
-     * @return array
+     * @param $id_BlogPost
+     * @param $id_comment
+     * @return object
+     * Returns one comment that matches a id
      */
     public function fetchOneCommentById($id_BlogPost, $id_comment)
     {
         /**
          * @return array
-         * Retourne
          */
         $array = [[':id', $id_BlogPost,PDO::PARAM_INT], [':id2', $id_comment, PDO::PARAM_INT] ];
         return $this->fetchOne('
@@ -67,7 +70,9 @@ class CommentModel extends MasterModel
     }
 
     /**
-     * @return array
+     * @param $id_comment
+     * @return boolean
+     * deactivate a comment that matches an id
      */
     public function disableComment($id_comment)
     {
@@ -83,13 +88,14 @@ class CommentModel extends MasterModel
     }
 
     /**
-     * @return array
+     * @param $id_comment
+     * @return boolean
+     * publish a comment that matches an id
      */
     public function publishComment($id_comment)
     {
         /**
-         * @return array
-         * Retourne
+         * @return boolean
          */
         $array = [[':id', $id_comment, PDO::PARAM_INT]];
         return $this->fetchOne('
@@ -99,7 +105,9 @@ class CommentModel extends MasterModel
     }
 
     /**
-     * @return array
+     * @param $comment
+     * @return boolean
+     * create a comment from an object
      */
     public function createComment($comment)
     {
@@ -117,13 +125,14 @@ class CommentModel extends MasterModel
     }
 
     /**
+     * @param $id_blogPost
      * @return array
+     * Return all comments disable that matches an id_blogPost
      */
     public function fetchAllCommentDisable($id_blogPost)
     {
         /**
          * @return array
-         * Retourne
          */
         $array = [[':id', $id_blogPost, PDO::PARAM_INT]];
         return $this->fetchAll('
@@ -136,13 +145,14 @@ class CommentModel extends MasterModel
             ORDER BY comment.dateCreate DESC', $array);
     }
     /**
+     * @param $id_user
      * @return array
+     * Return all comments disable from one user that matches an id_user
      */
     public function fetchAllCommentDisableByIdUser($id_user)
     {
         /**
          * @return array
-         * Retourne
          */
         $array = [[':id', $id_user, PDO::PARAM_INT]];
         return $this->fetchAll('
@@ -154,5 +164,4 @@ class CommentModel extends MasterModel
             AND comment.id_author= :id
             ORDER BY comment.dateCreate DESC', $array);
     }
-
 }

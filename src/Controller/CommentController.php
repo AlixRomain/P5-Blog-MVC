@@ -11,7 +11,10 @@ class CommentController extends MasterController
 
     private $adminOk;
     private $userOk;
-
+    /**
+     * Constructor of CommentController
+     * This role is to verify the rank of user
+     */
     public function __construct()
     {
         parent::__construct();
@@ -19,9 +22,10 @@ class CommentController extends MasterController
         $this->userOk = $this->session->validUser();
     }
     /**
+     *
      *@var Template
      */
-    const TwigAllComment = 'blogPost/comments.twig';
+    const TWIG_ALL_COMMENT = 'blogPost/comments.twig';
 
     /**
      * @param null $msg
@@ -41,7 +45,7 @@ class CommentController extends MasterController
                 $comments = $this->commentModel->fetchAllCommentDisable($blogPost['id_blogPost']);
                 array_push($onePostForComments,[$blogPost,$comments]);
             }
-            return $this->twig->render(self::TwigAllComment,
+            return $this->twig->render(self::TWIG_ALL_COMMENT,
                 ['comments'=> $onePostForComments,
                     'success'=> $msg
                 ]);
@@ -60,7 +64,7 @@ class CommentController extends MasterController
         }
         $comment = $this->commentModel->fetchOneCommentById($id_blogpost, $id_comment);
 
-        if($comment != false){
+        if($comment !== false){
             $comment =  $this->commentModel->publishComment($id_comment);
             ($comment !== false)? $error ='Publication réussi':$error = 'Echec de la publication du commentaire';
             return $this->allCommentDisableMethod($error);

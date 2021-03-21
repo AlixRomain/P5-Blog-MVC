@@ -9,13 +9,14 @@ use PDO;
 class BlogPostModel extends MasterModel
 {
     /**
+     * @param null $array
      * @return array
+     *  Return all blogPost
      */
     public function fetchAllBlogpost($array = null)
     {
         /**
          * @return array
-         * Retourne
          */
         return $this->fetchAll('
             SELECT * FROM blogPost
@@ -28,13 +29,14 @@ class BlogPostModel extends MasterModel
             ', $array);
     }
     /**
+     * @param null $array
      * @return array
+     * Return all blogPost with comments disable
      */
     public function fetchAllBlogPostWithCommentDisable($array = null)
     {
         /**
          * @return array
-         * Retourne
          */
         return $this->fetchAll('
             SELECT * FROM blogpost
@@ -48,15 +50,15 @@ class BlogPostModel extends MasterModel
             ', $array);
     }
     /**
-     * @return array
+     * @param $id_blogPost
+     * @return boolean
+     * disable one blogPost that matches an id_blogPost
      */
     public function disableBlogPost($id_blogPost)
     {
         /**
-         * @return array
-         * Retourne
+         * @return boolean
          */
-
         $array = [[':id', $id_blogPost,PDO::PARAM_INT] ];
         return $this->fetchOne('
             UPDATE blogpost SET
@@ -65,15 +67,15 @@ class BlogPostModel extends MasterModel
     }
 
     /**
-     * @return array
+     * @param $title
+     * @return object
+     * return blogPost that matches an title
      */
     public function fetchOneBlogPostByTitle( $title)
     {
         /**
-         * @return array
-         * Retourne
+         * @return object
          */
-
         $array = [[':title', $title,PDO::PARAM_STR] ];
         return $this->fetchOne('
             SELECT title FROM blogpost
@@ -81,13 +83,14 @@ class BlogPostModel extends MasterModel
     }
 
     /**
-     * @return array
+     * @param $id_blogpost
+     * @return object
+     * Return one blogPost  that matches an id_blogPost
      */
     public function fetchOneBlogPostById($id_blogpost)
     {
         /**
-         * @return array
-         * Retourne
+         * @return object
          */
 
         $array = [[':id', $id_blogpost, PDO::PARAM_INT] ];
@@ -100,7 +103,9 @@ class BlogPostModel extends MasterModel
             AND id_blogPost = :id',$array );
     }
     /**
-     * @return array
+     * @param $blogPost
+     * @return boolean
+     * insert one blogPost from one object
      */
     public function createBlogPost($blogPost)
     {
@@ -119,19 +124,22 @@ class BlogPostModel extends MasterModel
          return $this->execArray($req, $blog);
     }
     /**
-     * @return array
+     * @param $blogPost
+     * @param $id_blogPost
+     * @return boolean
+     * update one blogPost from one object that matches an id_blogPost
      */
     public function updateBlogPost($blogPost, $id_blogPost)
     {
-        $req = 'UPDATE blogpost SET title = :title, chapo = :chapo, content = :content, dateUpdate = :dateUpdate WHERE blogpost.id_blogPost =' .$id_blogPost;
+
+        $req = 'UPDATE blogpost SET title = :title, chapo = :chapo, content = :content, dateUpdate = :dateUpdate WHERE blogpost.id_blogPost = :id';
         $blog =[
            'title'      => $blogPost->getTitle(),
             'chapo'     => $blogPost->getChapo(),
             'content'   => $blogPost->getContent(),
-            'dateUpdate'=> $blogPost->getDateCreate()
+            'dateUpdate'=> $blogPost->getDateCreate(),
+            'id'        => $id_blogPost
         ];
         return $this->execArray($req, $blog);
     }
-
-
 }

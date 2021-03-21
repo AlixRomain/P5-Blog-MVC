@@ -9,14 +9,15 @@ use PDO;
 class UserModel extends MasterModel
 {
     /**
-     * @return array
+     * @param $email
+     * @return object
+     * return one user that matches an email
      */
     public function fetchOneUserByEmail($email)
     {
 
         /**
-         * @return array
-         * Retourne
+         * @return object
          */
         $array = [[':email', $email, PDO::PARAM_STR] ];
         return $this->fetchOne('
@@ -25,13 +26,15 @@ class UserModel extends MasterModel
             AND email = :email', $array);
     }
     /**
-    * @return array
+     * @param $email
+     * @param $pseudo
+     * @return object
+     * return one user that matches an email or pseudo
     */
     public function fetchOneUserByEmailOrPseudo($email, $pseudo)
     {
         /**
-         * @return array
-         * Retourne
+         * @return object
          */
         $array = [[':email', $email, PDO::PARAM_STR], [':pseudo', $pseudo, PDO::PARAM_STR] ];
         return $this->fetchOne('
@@ -41,7 +44,9 @@ class UserModel extends MasterModel
     }
 
     /**
-     * @return array
+     * @param $user
+     * @return boolean
+     * insert one user from an object
      */
     public function createUser($user)
     {
@@ -60,18 +65,18 @@ class UserModel extends MasterModel
             $user->getDateTokenExpire(),
             $user->getActif()
         ];
-
         return $this->execArray($req, $user);
     }
 
     /**
-     * @return array
+     * @param $user
+     * @return boolean
+     * update one token of one user
      */
     public function setNewTokenAndDateExpi($user)
     {
         /**
-         * @return array
-         * Retourne
+         * @return boolean
          */
         $array = [[':id', $user->getIdUser(), PDO::PARAM_INT], [':token', $user->getToken(), PDO::PARAM_INT], [':date', $user->getDateTokenExpire(), PDO::PARAM_STR] ];
         return $this->fetchOne('
@@ -81,14 +86,15 @@ class UserModel extends MasterModel
             WHERE user.id_user = :id', $array);
     }
     /**
-     * @return array
+     * @param $token
+     * @return boolean
+     * updtate a field actif from user table a matches an token
      */
     public function activAccount($token)
     {
 
         /**
-         * @return array
-         * Retourne
+         * @return boolean
          */
         $array = [[':token', $token, PDO::PARAM_INT]];
         return $this->fetchOne('
@@ -98,7 +104,9 @@ class UserModel extends MasterModel
     }
 
     /**
-     * @return array
+     * @param $token
+     * @return object
+     * return one user that matches an token
      */
     public function oneUserByTokenValid($token)
     {
@@ -113,13 +121,15 @@ class UserModel extends MasterModel
             AND dateTokenExpire >= NOW()',$array);
     }
     /**
-     * @return array
+     * @param $token
+     * @param $id_user
+     * @return object
+     * return one user that matches an id and token valid
      */
     public function oneUserByTokenValidAndIdUser($id_user, $token)
     {
         /**
-         * @return array
-         * Retourne
+         * @return object
          */
         $array = [[':id', $id_user, PDO::PARAM_INT], [':token', $token, PDO::PARAM_INT]];
         return $this->fetchOne('
@@ -129,13 +139,15 @@ class UserModel extends MasterModel
              AND dateTokenExpire >= NOW()', $array);
     }
     /**
-     * @return array
+     * @param $id_user
+     * @param $pass
+     * @return boolean
+     * update one password of user
      */
     public function updatePassWord($id_user, $pass)
     {
         /**
-         * @return array
-         * Retourne
+         * @return boolean
          */
         $array = [[':id', $id_user, PDO::PARAM_INT], [':pass', $pass, PDO::PARAM_STR]];
         return $this->fetchOne('
@@ -144,13 +156,14 @@ class UserModel extends MasterModel
             WHERE id_user = :id', $array);
     }
     /**
-     * @return array
+     * @param $token
+     * @return object
+     * return one user that matches an token
      */
     public function fetchOneUserByToken($token)
     {
         /**
-         * @return array
-         * Retourne
+         * @return object
          */
         $array = [[':token', $token, PDO::PARAM_INT]];
         return $this->fetchOne('
@@ -158,13 +171,14 @@ class UserModel extends MasterModel
              WHERE token = :token', $array);
     }
     /**
-     * @return array
+     * @param $token
+     * @return boolean
+     * return a boolean valid if a param matches an token in user table
      */
     public function isExistToken($token)
     {
         /**
-         * @return array
-         * Retourne
+         * @return boolean
          */
         $array = [[':token', $token, PDO::PARAM_INT]];
         return $this->fetchOne('

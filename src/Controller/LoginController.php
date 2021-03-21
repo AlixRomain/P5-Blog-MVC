@@ -12,14 +12,14 @@ class LoginController extends MasterController
     /**
      *@var Template
      */
-    const TwigLogin = 'Admin/login.twig';
+    const TWIG_LOGIN = 'Admin/login.twig';
 
     public function loginMethod( $msg = null)
     {
         $idBlogPost = $this->get->getDataGet('idBlogPost');
         if(is_numeric($idBlogPost)){
             $errors = ['Vous devez être connecter pour commenter sur notre blog'];
-            return $this->twig->render(self::TwigLogin,[
+            return $this->twig->render(self::TWIG_LOGIN,[
                 'errors' => $errors
             ]);
         }
@@ -34,12 +34,12 @@ class LoginController extends MasterController
                 $this->redirect('home');
             }else{
                 $errors = ['Les identifiants ne sont pas valides.'];
-                return $this->twig->render(self::TwigLogin,[
+                return $this->twig->render(self::TWIG_LOGIN,[
                     'errors' => $errors
                 ]);
             }
         }else{
-            return $this->twig->render(self::TwigLogin,[ 'success' => $msg]);
+            return $this->twig->render(self::TWIG_LOGIN,[ 'success' => $msg]);
         }
     }
 
@@ -92,10 +92,10 @@ class LoginController extends MasterController
                     $mailOk =  $this->mailer->sendCreateAccountEmail($user);
                     if($mailOk !== 1){
                         $errors = ['Nous rencontrons un problème pour vous envoyer votre lien d\'activation, merci de réessayer dans un petit moment.'];
-                        return $this->twig->render(self::TwigLogin,['success' => $errors] );
+                        return $this->twig->render(self::TWIG_LOGIN,['success' => $errors] );
                     }else{
                         $success = 'Votre inscription à bien été pris en compte. Un lien d\'activation vient de vous être envoyé sur votre messagerie "'.$user->getEmail().'" vous avez à présent 15 min pour vous authentifier.';
-                        return $this->twig->render(self::TwigLogin,['success' => $success] );
+                        return $this->twig->render(self::TWIG_LOGIN,['success' => $success] );
                     }
                 }
             }
@@ -132,7 +132,7 @@ class LoginController extends MasterController
                 $mailOk =  $this->mailer->sendCreateAccountEmail($user);
                 if($mailOk !== 1){
                     $errors = ['Nous rencontrons un problème pour vous envoyer votre lien d\'activation, merci de réessayer dans un petit moment.'];
-                    return $this->twig->render(self::TwigLogin,['success' => $errors] );
+                    return $this->twig->render(self::TWIG_LOGIN,['success' => $errors] );
                 }else{
                     $errors = ['Vous avez dépassé le temps imparti pour activer votre compte. Nous vous avons envoyé un nouveau lien sur votre boîte mail. Vous avez de nouveau 15 min pour le valider.'];
                     return $this->twig->render('Admin/login.twig',[
@@ -174,7 +174,7 @@ class LoginController extends MasterController
                    $mailOk =  $this->mailer->sendNewLinkActivation($user);
                    if($mailOk !== 1){
                        $errors = ['Nous rencontrons un problème pour vous envoyer votre lien d\'activation, merci de réessayer dans un petit moment.'];
-                       return $this->twig->render(self::TwigLogin,['success' => $errors] );
+                       return $this->twig->render(self::TWIG_LOGIN,['success' => $errors] );
                    }else{
                        $success = 'Nous venons de vous envoyer un nouveau liens d\'activation, vous avez à présent 15 min pour réinitialiser votre mot de passe';
                        return $this->twig->render('Admin/login.twig',[
@@ -224,7 +224,7 @@ class LoginController extends MasterController
 
                     $pass = password_hash($dataPost['pass1'], PASSWORD_DEFAULT);
                     $this->userModel->updatePassWord($dataget['idUser'], $pass );
-                return $this->twig->render(self::TwigLogin,['success' => 'Veuillez vous connecter avec vos nouveaux identifiants']);
+                return $this->twig->render(self::TWIG_LOGIN,['success' => 'Veuillez vous connecter avec vos nouveaux identifiants']);
             }
         }
     }
