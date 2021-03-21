@@ -10,9 +10,12 @@ use Swift_SmtpTransport;
 
 class MailerController
 {
+    /**
+     * Modifier dataMail.php à la place de dataMail2.php
+     * Import des variables d'environnement
+     */
     public function __construct()
     {
-        //require_once('../config/dataMail.php');
         require_once('../config/dataMail2.php');
     }
     /**
