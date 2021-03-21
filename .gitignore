@@ -107,12 +107,6 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/phpstorm
 vendor/
 
-public/bootstrap/js/bootstrap.bundle.js.map
-
-public/bootstrap/js/bootstrap.bundle.min.js.map
-
-public/bootstrap/js/bootstrap.js.map
-
-public/bootstrap/js/bootstrap.min.js.map
+public/bootstrap/js
 
 config/dataMail2.php
