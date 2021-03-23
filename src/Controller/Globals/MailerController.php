@@ -11,12 +11,12 @@ use Swift_SmtpTransport;
 class MailerController
 {
     /**
-     * Modifier dataMail.php à la place de dataMail2.php
+     * Modifier dataMail.php à la place de dataMailTemplate.php
      * Import des variables d'environnement
      */
     public function __construct()
     {
-        require_once('../config/dataMail2.php');
+        require_once('../config/dataMail.php');
     }
     /**
      * @param array $dataPost
@@ -55,7 +55,7 @@ class MailerController
         // Create a message
         $token = $user->getToken();
         //http:// si localHost www.
-        $link = "http://". filter_input(INPUT_SERVER, 'HTTP_HOST')."/index.php?page=login&method=registerMethod&token=" .$token;
+        $link = MAIL_URI_LINK . "/index.php?page=login&method=registerMethod&token=" .$token;
         $content = sprintf('<h1>Bienvenue dans l\'équipe '.$user->getFirstName(). $user->getLastName().'</h1>
 							<p>Voici votre nouveau mail d\'activation.</p>
 							<p>Pour finaliser votre inscription, 
@@ -92,7 +92,7 @@ class MailerController
         // Create a message
         $token = $user->getToken();
         //http:// si localHost www.
-        $link = "http://". filter_input(INPUT_SERVER, 'HTTP_HOST')."/index.php?page=login&idUser=".$user->getIdUser()."&method=newPassMethod&token=" .$token;
+        $link = MAIL_URI_LINK . "/index.php?page=login&idUser=".$user->getIdUser()."&method=newPassMethod&token=" .$token;
         $content = sprintf('<h1>Enfin de retour parmis nous '.$user->getFirstName(). $user->getLastName().'</h1>
 							<p>Voici le lien à cliquer pour réinitialiser votre mot de passe.</p>
 							<p>Veuillez cliquer sur ce lien :</p>
