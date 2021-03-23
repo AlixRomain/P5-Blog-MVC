@@ -111,3 +111,4 @@ public/bootstrap/js
 
 config/dataMail.php
 config/database.php
+.htaccess
