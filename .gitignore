@@ -109,4 +109,5 @@ vendor/
 
 public/bootstrap/js
 
-config/dataMail2.php
+config/dataMail.php
+config/database.php

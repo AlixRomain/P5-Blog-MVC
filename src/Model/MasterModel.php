@@ -22,8 +22,24 @@ class MasterModel
             }
             $req->execute();
             return $req->fetch();
+
         } catch (\PDOException $e){
-            //rerouter? +afficher l'erreur
+        }
+    }
+    /**
+     * @param $req
+     * @return mixed
+     */
+    public function execOne($req, $array)
+    {
+        try {
+            $req = Connexion::getPDO()->prepare($req);
+            foreach ($array as $k=> $val){
+                $req->bindValue($val[0], $val[1], $val[2]);
+            }
+            $req->execute();
+            return $req->rowCount();
+        } catch (\PDOException $e){
         }
     }
 

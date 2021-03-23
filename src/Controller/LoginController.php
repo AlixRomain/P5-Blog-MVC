@@ -216,6 +216,7 @@ class LoginController extends MasterController
             //Est ce que les deux pass sont identiques?
             $password = $this->session->validPassUser($dataPost['pass1'],$dataPost['pass2']);
             if($cleanData !== true || is_null($password)){
+                (is_null($password))?$cleanData =['Les mots de passes ne sont pas identiques']: '';
                 return $this->twig->render('Admin/newPassAccount.twig',['errors' => $cleanData]);
             }else {
 

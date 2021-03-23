@@ -1,14 +1,11 @@
 <?php
-
-
 namespace App\Controller;
-
 
 use App\Controller\Globals\MasterController;
 use App\Entity\BlogPost;
 use App\Entity\Comment;
 
-class BlogPostController extends MasterController
+class BlogpostController extends MasterController
 {
     /**
      *@var Template
@@ -43,7 +40,6 @@ class BlogPostController extends MasterController
     public function allBlockPostMethod($msg = null)
     {
         $blogposts = $this->blogModel->fetchAllBlogpost();
-
         return $this->twig->render(self::TWIG_ALL,
             ['blogPosts'=> $blogposts,
                 'success'=> $msg
@@ -52,7 +48,7 @@ class BlogPostController extends MasterController
     /**
      *
      */
-    public function showBlockPostMethod($msg = null, $id_blog = null)
+    public function showBlockPostMethod($errors = null, $id_blog = null, $success = null)
     {
         (!isset($id_blogpost))?$id_blogpost = $this->get->getDataGet('idBlogPost') :$id_blogpost = $id_blog;
 
@@ -63,7 +59,7 @@ class BlogPostController extends MasterController
         if($blogpost !== false){
             $comments =  $this->commentModel->fetchAllCommentByBlogpost($id_blogpost);
             return $this->twig->render(self::TWIG_ONE,
-                ['blogPost'=> $blogpost, 'comments'=> $comments, 'errors'=> $msg ]);
+                ['blogPost'=> $blogpost, 'comments'=> $comments, 'errors'=> $errors, 'success'=> $success ]);
         }else{
             $this->redirect('home','defaultMethod');
         }
@@ -229,8 +225,10 @@ class BlogPostController extends MasterController
         $comment = $this->commentModel->fetchOneCommentById($id_blogpost, $id_comment);
         if($comment !== false){
             $comment =  $this->commentModel->disableComment($id_comment);
-            ($comment !== false)? $error =['Commentaire supprimé avec succès']:$error = ['Echec de la suppression du commentaire'];
-            return $this->showBlockPostMethod($error, $id_blogpost);
+            $success = null;
+            $error = null;
+            ($comment !== false)? $success ='Commentaire supprimé avec succès':$error = ['Echec de la suppression du commentaire'];
+            return $this->showBlockPostMethod($error, $id_blogpost, $success);
         }else{
             $this->redirect('home','defaultMethod');
         }

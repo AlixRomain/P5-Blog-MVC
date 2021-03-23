@@ -9,23 +9,23 @@ use PDO;
 class CommentModel extends MasterModel
 {
     /**
-     * @param $id_blogpost
+     * @param $id_blogPost
      * @return array
      * Return all comments from one blogPost
      */
-    public function fetchAllCommentByBlogpost($id_blogpost)
+    public function fetchAllCommentByBlogpost($id_blogPost)
     {
         /**
          * @return array
          */
-        $array = [[':id', $id_blogpost, PDO::PARAM_INT]];
+        $array = [[':id', $id_blogPost, PDO::PARAM_INT]];
         return $this->fetchAll('
             SELECT * FROM comment
             INNER JOIN user 
             ON user.id_user = comment.id_author
             WHERE comment.publish = 1
             AND comment.actif = 1
-            AND comment.id_blogpost = :id
+            AND comment.id_blogPost = :id
             ORDER BY comment.dateCreate DESC
             ', $array);
 
@@ -45,8 +45,8 @@ class CommentModel extends MasterModel
         return $this->fetchOne('
             SELECT * FROM comment
             INNER JOIN blogpost
-            ON blogpost.id_blogpost = comment.id_blogpost
-            WHERE blogpost.id_blogpost = :id
+            ON blogpost.id_blogPost = comment.id_blogPost
+            WHERE blogpost.id_blogPost = :id
              AND comment.content = :content', $array);
     }
     /**
@@ -64,8 +64,8 @@ class CommentModel extends MasterModel
         return $this->fetchOne('
             SELECT * FROM comment
             INNER JOIN blogpost
-            ON blogpost.id_blogpost = comment.id_blogpost
-            WHERE blogpost.id_blogpost = :id
+            ON blogpost.id_blogPost = comment.id_blogPost
+            WHERE blogpost.id_blogPost = :id
              AND comment.id_comment = :id2',  $array);
     }
 
@@ -77,11 +77,11 @@ class CommentModel extends MasterModel
     public function disableComment($id_comment)
     {
         /**
-         * @return array
-         * Retourne
+         * @return boolean
          */
+
         $array = [[':id', $id_comment, PDO::PARAM_INT]];
-        return $this->fetchOne('
+        return $this->execOne('
             UPDATE comment SET
             actif = 0
             WHERE comment.id_comment = :id',$array);
@@ -98,7 +98,7 @@ class CommentModel extends MasterModel
          * @return boolean
          */
         $array = [[':id', $id_comment, PDO::PARAM_INT]];
-        return $this->fetchOne('
+        return $this->execOne('
             UPDATE comment SET
             publish = 1
             WHERE comment.id_comment = :id', $array);

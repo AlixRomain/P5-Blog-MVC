@@ -79,7 +79,7 @@ class UserModel extends MasterModel
          * @return boolean
          */
         $array = [[':id', $user->getIdUser(), PDO::PARAM_INT], [':token', $user->getToken(), PDO::PARAM_INT], [':date', $user->getDateTokenExpire(), PDO::PARAM_STR] ];
-        return $this->fetchOne('
+        return $this->execOne('
             UPDATE  user SET
             token = :token,
             dateTokenExpire = :date
@@ -97,7 +97,7 @@ class UserModel extends MasterModel
          * @return boolean
          */
         $array = [[':token', $token, PDO::PARAM_INT]];
-        return $this->fetchOne('
+        return $this->execOne('
             UPDATE  user SET
             actif = 1
             WHERE user.token = :token', $array);
@@ -150,7 +150,7 @@ class UserModel extends MasterModel
          * @return boolean
          */
         $array = [[':id', $id_user, PDO::PARAM_INT], [':pass', $pass, PDO::PARAM_STR]];
-        return $this->fetchOne('
+        return $this->execOne('
             UPDATE  user SET
             password = :pass
             WHERE id_user = :id', $array);
