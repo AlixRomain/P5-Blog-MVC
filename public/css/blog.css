@@ -34,3 +34,18 @@
   -ms-flex-align: center;
   align-items: center;
 }
+.toto{
+  padding: 15px;
+  overflow: hidden;
+}
+.toto:nth-child(odd)  {
+  margin-bottom: 30px;
+  background: #f8f9fa;
+}
+.effet{
+  min-height: 1px;
+}
+.toto:hover .effet{
+  border-left: 1000px solid #5a6268;
+  transition: 0.8s;
+}

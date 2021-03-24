@@ -35,28 +35,30 @@
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 {% for blogPost in blogPosts %}
-                    <div class="post-preview">
-                        <a href="index.php?page=blogPost&method=showBlockPostMethod&idBlogPost={{ blogPost.id_blogPost }}">
-                            <h2 class="post-title">
-                                {{ blogPost.title|raw }}
-                            </h2>
-                            <h3 class="post-subtitle">
-                                {{ blogPost.chapo|raw  }}
-                            </h3>
-                        </a>
-                        <p class="post-meta">Rédigé par
-                            <a href="index.php?page=blogPost&method=showBlockPostMethod&idBlogPost={{ blogPost.id_blogPost }}">{{blogPost.firstName  }} {{blogPost.lastName  }}</a>
-                            le {{ blogPost.dateCreate|date("d/m/Y") }}
-                        </p>
-                        {% if session.rank == 'ADMIN' %}
-                            <p>
-                                <a href="index.php?page=blogPost&method=updateBlogPostMethod&idBlogPost={{ blogPost.id_blogPost }}" class="btn btn-primary">Modifier</a>
-                                <a class="btn btn-danger btn-xs" href="index.php?page=blogPost&method=deleteBlogPostMethod&idBlogPost={{ blogPost.id_blogPost  }}" class="btn btn-primary"><i class="far fa-trash-alt"></i></a>
+                    <div class="toto">
+                        <div class="post-preview">
+                            <a href="index.php?page=blogPost&method=showBlockPostMethod&idBlogPost={{ blogPost.id_blogPost }}">
+                                <h2 class="post-title">
+                                    {{ blogPost.title|raw }}
+                                </h2>
+                                <p class="effet"></p>
+                                <h3 class="post-subtitle">
+                                    {{ blogPost.chapo|raw  }}
+                                </h3>
+                            </a>
+                            <p class="post-meta">Rédigé par
+                                <a href="index.php?page=blogPost&method=showBlockPostMethod&idBlogPost={{ blogPost.id_blogPost }}">{{blogPost.firstName  }} {{blogPost.lastName  }}</a>
+                                le {{ blogPost.dateCreate|date("d/m/Y") }}
                             </p>
-                        {% endif %}
-
-                    </div>
+                            {% if session.rank == 'ADMIN' %}
+                                <p>
+                                    <a href="index.php?page=blogPost&method=updateBlogPostMethod&idBlogPost={{ blogPost.id_blogPost }}" class="btn btn-primary">Modifier</a>
+                                    <a class="btn btn-danger btn-xs confSupCom" data-value=" {{ blogPost.title|raw }}" href="index.php?page=blogPost&method=deleteBlogPostMethod&idBlogPost={{ blogPost.id_blogPost  }}" class="btn btn-primary"><i class="far fa-trash-alt"></i></a>
+                                </p>
+                            {% endif %}
+                        </div>
                     <hr>
+                    </div>
                 {% endfor %}
                 <!-- Pager -->
                 <div class="clearfix">

@@ -88,12 +88,12 @@ class BlogpostController extends MasterController
      */
     public function createBlogPostMethod()
     {
-
         $dataPost = $this->post->getArrayPost();
-        if(!isset($dataPost) || empty($dataPost) || is_null($this->adminOk)){
+        if(is_null($this->adminOk)){
+            $this->redirect('home','defaultMethod');
+        }elseif(!isset($dataPost) || empty($dataPost)){
             return $this->twig->render(self::TWIG_CREATE);
         }else{
-
             //Si je rafraichit la page et que j'ai déjà ce post e nbase je reroute
             $exist = $this->blogModel->fetchOneBlogPostByTitle( $this->post->getDataClean($dataPost['title']));
             if ($exist !== false){
@@ -136,13 +136,17 @@ class BlogpostController extends MasterController
     public function updateBlogPostMethod()
     {
         $dataPost = $this->post->getArrayPost();
-        if(!isset($dataPost) || empty($dataPost) || is_null($this->adminOk)){
+        if(is_null($this->adminOk)){
+            $this->redirect('home','defaultMethod');
+        }elseif(!isset($dataPost) || empty($dataPost)){
             $id_blogpost = $this->get->getDataGet('idBlogPost');
             $validBlogPost = $this->blogModel->fetchOneBlogPostById($id_blogpost);
             if ($validBlogPost !== false){
                 return $this->twig->render(self::TWIG_CREATE,[
                     'blogPost'=> $validBlogPost,
                 ]);
+            }else{
+                $this->redirect('home','defaultMethod');
             }
         }else{
             $cleanData = $this->validator->blogPostValid($dataPost);
@@ -196,16 +200,17 @@ class BlogpostController extends MasterController
                     return $this->showBlockPostMethod($cleanData, $id_blogpost);
                 }else{
                     $dateCreate = date("Y-m-d H:i:s");
+                    is_null($this->adminOk)?$publish = 0 : $publish = 1 ;
                     $comment = new Comment([
                         'content' => $this->post->getDataClean($dataPost['comment']),
                         'dateCreate'=> $dateCreate,
-                        'publish' => 0,
+                        'publish' => $publish,
                         'actif' => 1,
                         'id_author' => 1,
                         'id_blogPost' => $id_blogpost
                     ]);
                     if($this->commentModel->createComment($comment)){
-                        $success = 'Votre commentaire à bien été pris en compte. Il est en attente de validation.';
+                        is_null($this->adminOk)?$success = 'Votre commentaire à bien été pris en compte. Il est en attente de validation.' : $success = 'Nouveau commentaire publié!';
                         return $this->allBlockPostMethod($success);
                     }
                 }

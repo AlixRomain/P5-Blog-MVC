@@ -32,7 +32,7 @@
                 <div class="col-lg-8 col-md-10 mx-auto">
                     <p>{{ blogPost.content|raw  }}</p>
                     <p class="post-meta post-preview">Mis à jour le {{ blogPost.dateCreate|date("d/m/Y") }} par
-                        <strong>{{blogPost.firstName  }} {{blogPost.lastName  }}</strong>
+                        <strong>{{blogPost.firstName  }} {{blogPost.lastName  }} à {{ blogPost.dateCreate|date('H:i') }}</strong>
                     </p>
                     <span class="subheading" style="font-weight: bold">Et vous vous en pensez quoi {{ session.lastName }}? </span>
 
@@ -85,7 +85,7 @@
                                     {% if session.rank == 'ADMIN' %}
                                         <div class="action">
                                             <a href="index.php?page=blogPost&method=deleteCommentMethod&idComment={{ comment.id_comment }}&idBlogPost={{ blogPost.id_blogPost }}">
-                                                <button type="button" class="btn btn-danger btn-xs" title="Suprimmer">
+                                                <button type="button" class="btn btn-danger btn-xs confSupCom" data-value="{{ com.content }}" title="Suprimmer">
                                                     <span class="glyphicon glyphicon-trash"><i class="far fa-trash-alt"></i></span>
                                                 </button>
                                             </a>
@@ -95,7 +95,7 @@
                                 <div class="col-xs-10 col-md-10">
                                     <div>
                                         <div class="mic-info">
-                                           <strong> Par: {{ comment.firstName}} {{ comment.lastName}}  le {{ comment.dateCreate|date("d/m/Y") }}</strong>
+                                           <strong> Par: {{ comment.firstName}} {{ comment.lastName}}  le {{ comment.dateCreate|date("d/m/Y") }} à {{ comment.dateCreate|date('H:i') }}</strong>
                                         </div>
                                         <span >{{ comment.pseudo}}</span>
                                     </div>
