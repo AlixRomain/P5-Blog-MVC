@@ -34,6 +34,9 @@ abstract class MasterController extends ImportController
         $this->twig->addGlobal('session', $this->session->getUserSession());
         $this->twig->addGlobal('number', $number);
     }
+    public function newNumber(){
+        $this->__construct();
+    }
 
     /**
      * @param string $page

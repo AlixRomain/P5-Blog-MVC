@@ -51,7 +51,6 @@ class CommentController extends MasterController
                 ]);
         }
     }
-
     /**
      *
      */
@@ -67,6 +66,7 @@ class CommentController extends MasterController
         if($comment !== false){
             $comment =  $this->commentModel->publishComment($id_comment);
             ($comment !== false)? $error ='Publication réussi':$error = 'Echec de la publication du commentaire';
+            $this->newNumber();
             return $this->allCommentDisableMethod($error);
         }else{
             $this->redirect('home','defaultMethod');
