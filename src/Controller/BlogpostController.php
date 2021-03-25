@@ -233,7 +233,7 @@ class BlogpostController extends MasterController
             $success = null;
             $error = null;
             ($comment !== false)? $success ='Commentaire supprimé avec succès':$error = ['Echec de la suppression du commentaire'];
-            $this->newNumber();
+            $this->getCommentsDisable();
             return $this->showBlockPostMethod($error, $id_blogpost, $success);
         }else{
             $this->redirect('home','defaultMethod');

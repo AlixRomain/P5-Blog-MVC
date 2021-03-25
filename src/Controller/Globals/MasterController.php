@@ -20,10 +20,7 @@ abstract class MasterController extends ImportController
     {
         parent::__construct();
 
-        $number = 0;
-        if($this->session->validAdmin()){
-            $number = count($this->commentModel->fetchAllCommentDisableByIdUser($_SESSION['user']['id_user']));
-        }
+
         $this->twig = new Environment(new FilesystemLoader('../src/View'), array(
             'cache' => false,
             'debug' => true,
@@ -32,10 +29,14 @@ abstract class MasterController extends ImportController
         $this->twig->addExtension(new DebugExtension());
         //création super global session à partir de l'objet user récupérer
         $this->twig->addGlobal('session', $this->session->getUserSession());
-        $this->twig->addGlobal('number', $number);
+        $this->getCommentsDisable();
     }
-    public function newNumber(){
-        $this->__construct();
+    public function getCommentsDisable(){
+        $number = 0;
+        if($this->session->validAdmin()){
+            $number = count($this->commentModel->fetchAllCommentDisableByIdUser($_SESSION['user']['id_user']));
+        }
+         $this->twig->addGlobal('number', $number);
     }
 
     /**
